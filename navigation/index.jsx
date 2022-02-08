@@ -5,20 +5,22 @@
  */
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { ColorSchemeName, Pressable } from 'react-native';
 import { Provider } from 'react-redux';
+import { View } from 'react-native';
 
-import store from '../reducers/createInitStore';
+import store from '../reducers';
 import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
-import CoinList from '../screens/CoinList';
+import PairsListScreen from '../screens/PairsListScreen';
+import PairDetailScreen from '../screens/PairDetailScreen';
 
-export default function Navigation({ colorScheme }) {
+
+export default function Navigation() {
   return (
     <Provider store={store}>
-      <NavigationContainer theme={DarkTheme}>
-        <RootNavigator />
-      </NavigationContainer>
+        <NavigationContainer theme={DarkTheme}>
+          <RootNavigator />
+        </NavigationContainer>
     </Provider>
   );
 }
@@ -32,9 +34,11 @@ const Stack = createNativeStackNavigator();
 function RootNavigator() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Root" component={CoinList} options={{ headerShown: false }} />
+      <Stack.Screen name="Root" component={PairsListScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="PairDetail" component={PairDetailScreen} options={{ headerShown: false }} />
       {/* <Stack.Screen name="CurrencySelect" component={TabOneScreen} options={{ headerShown: false }} /> */}
       {/* <Stack.Screen name="SortSelect" component={TabOneScreen} options={{ headerShown: false }} /> */}
+
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
