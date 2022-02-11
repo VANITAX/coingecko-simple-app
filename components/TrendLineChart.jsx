@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   hlPriceLabel: {
-    fontSize: 18,
+    fontSize: 16,
     color: '#fff',
     ...font.roboto.bold
   },
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
   },
 
   dataRangeLabel: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#B1B1B1',
     ...font.roboto.regular
   }

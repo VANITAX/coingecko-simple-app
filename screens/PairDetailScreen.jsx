@@ -185,13 +185,13 @@ const styles = StyleSheet.create({
   title: {
     color: '#fff',
     letterSpacing: 1.1,
-    fontSize: 26,
+    fontSize: 22,
     marginBottom: 4,
     ...font.roboto.bold
 
   },
   subtitle: {
-    fontSize: 18,
+    fontSize: 14,
     color: '#B1B1B1',
     ...font.roboto.regular
   },
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
     marginBottom: 28,
   },
   priceLabel: {
-    fontSize: 18,
+    fontSize: 16,
     letterSpacing: 1.1,
     color: '#B1B1B1',
     marginBottom: 4,
@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
   },
 
   currentPrice: {
-    fontSize: 32,
+    fontSize: 30,
     letterSpacing: 1.1,
     color: '#fff',
     marginRight: 8,
@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
   },
 
   changePercentage: {
-    fontSize: 20,
+    fontSize: 18,
     lineHeight: 24,
     ...font.roboto.regular
   },
@@ -239,16 +239,16 @@ const styles = StyleSheet.create({
   },
 
   sectionHeader: {
-    borderBottomWidth: 1,
     justifyContent: 'space-between',
     flexDirection: 'row',
+    borderBottomWidth: 1,
     borderColor: 'rgba(255,255,255,0.15)',
     borderStyle: 'solid', 
     paddingBottom: 12,
   },
 
   sectionTitle: {
-    fontSize: 22,
+    fontSize: 18,
     color: '#fff',
     ...font.roboto.bold
   },
@@ -269,14 +269,14 @@ const styles = StyleSheet.create({
   },
 
   statsInfoLabel: {
-    fontSize: 16,
+    fontSize: 12,
     color: '#B1B1B1',
     marginBottom: 6,
     ...font.roboto.regular
   },
 
   statsInfoValue: {
-    fontSize: 18,
+    fontSize: 16,
     color: '#fff',
     ...font.roboto.bold
   },
@@ -296,7 +296,7 @@ const styles = StyleSheet.create({
   },
 
   seeMoreBtnText: {
-    fontSize: 18,
+    fontSize: 14,
     color: '#B1B1B1',
     ...font.roboto.regular
   },

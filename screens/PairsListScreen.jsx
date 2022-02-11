@@ -12,6 +12,8 @@ import font from '../constants/styleFonts';
 
 import OptionsIcon from '../assets/images/options.png';
 import ExchangeIcon from '../assets/images/exchange.png';
+import ShareIcon from '../assets/images/share.png';
+import SearchIcon from '../assets/images/search.png';
 const MockData = [
   "bitcoin",
   "ethereum",
@@ -36,7 +38,24 @@ const renderItem = ({ item:id }) => (
 export default function PairsListScreen({ navigation }) {
   return (
     <ScreenViewWrapper>
-      <Text style={styles.header}>Markets</Text>
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>Markets</Text>
+        <View style={styles.tools}>
+          <Pressable 
+            style={styles.toolButton}
+            onPress={()=>navigation.navigate('Modal')} 
+          >
+            <Image style={styles.toolIcon} source={SearchIcon} />
+          </Pressable>
+          <Pressable 
+            style={styles.toolButton}
+            onPress={()=>navigation.navigate('Modal')} 
+          >
+          <Image style={styles.toolIcon} source={ShareIcon} />
+        </Pressable>
+        </View>
+      </View>
+      
       <View style={styles.filterContainer}>
         <Pressable 
           style={styles.filterButton}
@@ -66,15 +85,30 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
   },
   header: {
-    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingBottom: 38,
+  },
+  tools: {
+    flexDirection: 'row',
+  },
+  toolIcon: {
+    width: 22, 
+    height: 22,
+  },
+  toolButton: {
+    marginLeft: 16
+  },
+  headerTitle: {
+    // width: '100%',
     color: '#fff', 
     fontSize: 40,
-    marginBottom: 28,
     ...font.roboto.bold
   },
   filterContainer: {
     flexDirection: 'row',
-    marginBottom: 20,
+    marginBottom: 32,
   },
   filterButton: {
     alignSelf: 'center',
