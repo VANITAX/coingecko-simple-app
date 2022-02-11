@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { LineChart } from 'react-native-chart-kit';
-import { Dimensions, View, StyleSheet } from 'react-native';
+import { Dimensions, View, Text, StyleSheet } from 'react-native';
 import FormatNumberText from '../components/FormatNumberText';
 import font from '../constants/styleFonts';
 
@@ -28,7 +28,7 @@ export default function TrendLineChart({ data, style }) {
   return (
     <View style={styles.container}>
       <FormatNumberText
-        style={[styles.priceLabel, styles.highPrice]}
+        style={[styles.hlPriceLabel, styles.highPrice]}
         prefix="$" 
         fixed={2}
         format="commas" 
@@ -39,7 +39,7 @@ export default function TrendLineChart({ data, style }) {
           datasets: [{ data }],
         }}
         width={chartWidth}
-        height={180}
+        height={150}
         withDots={false}
         withVerticalLabels={false}
         withHorizontalLabels={false}
@@ -51,13 +51,16 @@ export default function TrendLineChart({ data, style }) {
         style={styles.chart}
         bezier
       />
-      <FormatNumberText
-        style={[styles.priceLabel, styles.lowPrice]}
-        prefix="$" 
-        fixed={2}
-        format="commas" 
-        value={low}
-      />
+      <View style={styles.chartFooter}>
+        <FormatNumberText
+          style={[styles.hlPriceLabel, styles.lowPrice]}
+          prefix="$" 
+          fixed={2}
+          format="commas" 
+          value={low}
+        />
+        <Text style={styles.dataRangeLabel}>Range: 1 Week</Text>
+      </View>
     </View>
   );
 }
@@ -66,8 +69,8 @@ const styles = StyleSheet.create({
   container: {
     overflow: 'hidden',
   },
-  priceLabel: {
-    fontSize: 12,
+  hlPriceLabel: {
+    fontSize: 18,
     color: '#fff',
     ...font.roboto.bold
   },
@@ -81,5 +84,16 @@ const styles = StyleSheet.create({
     transform: ([
       { translateX: -65 }
     ])
+  },
+  chartFooter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
+
+  dataRangeLabel: {
+    fontSize: 16,
+    color: '#B1B1B1',
+    ...font.roboto.regular
   }
 })

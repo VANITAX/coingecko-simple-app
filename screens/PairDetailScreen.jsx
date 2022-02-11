@@ -42,6 +42,15 @@ const {
   price_change_percentage_24h
 } = mockData["bitcoin"];
 
+const statsInfoItem = ({label, value}) => {
+  return (
+    <View style={styles.statsInfoItem}>
+      <Text style={styles.statsInfoLabel}>{label}</Text>
+      <Text style={styles.statsInfoValue}>{value}</Text>
+    </View>
+  )
+}
+
 export default function PairDetailScreen({ navigation }) {
   return (
     <ScreenViewWrapper>
@@ -84,19 +93,61 @@ export default function PairDetailScreen({ navigation }) {
           </View>
           <View style={styles.graphContainer}>
            <TrendLineChart style={styles.graphContainer} data={[
-            41673.8395543094, 
-            41493.690050910525,
-            42475.543220951215,
-            43910.929986443094,
-            44184.447511676175, 
-            44383.88805541707,
-            43628.13953235228, 
-            43174.37014223908,
+              41673.8395543094, 
+              41493.690050910525,
+              42475.543220951215,
+              43910.929986443094,
+              44184.447511676175, 
+              44383.88805541707,
+              43628.13953235228, 
+              43174.37014223908,
           ]}/>
           </View>
-          <View style={styles.statContainer}>
+          <View style={styles.statsContainer}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>Statistics</Text>
+              <Pressable 
+                style={styles.seeMoreBtn}
+                onPress={()=>navigation.navigate('Modal')} 
+              >
+                <Text style={styles.seeMoreBtnText}>See All</Text>
+                <Image style={styles.leftArrow} source={RightArrowIcon} />
+              </Pressable>
+            </View>
+            <View style={styles.statsDetailContent}>
+              <View style={styles.statsDetailcolumn}>
+                {statsInfoItem({label: 'Market Cap', value: 'US$786.64 Bn'})}
+                {statsInfoItem({label: 'Volume 24h', value: 'US$786.64 Bn'})}
+                {statsInfoItem({label: 'Max Supply', value: '21 M BTC'})}
+                {statsInfoItem({label: 'All Time High', value: 'US$68,788.63'})}
+                {statsInfoItem({label: 'All Time Low', value: 'US$65.53'})}
+              </View>
+              <View style={styles.verticalDivider} />
+              <View style={styles.statsDetailcolumn}>
+                {statsInfoItem({label: 'Fully Diluted Market Cap', value: 'US$871.264 Bn'})}
+                {statsInfoItem({label: 'Circulating Supply', value: '18.95 M BTC'})}
+                {statsInfoItem({label: 'Total Supply', value: '18.95 M BTC'})}
+                {statsInfoItem({label: 'Rank', value: '#1'})}
+                {statsInfoItem({label: 'Market Dominance', value: '41.62%'})}
+              </View>
+            </View>
           </View>
-          <View style={styles.aboutContainer}>
+          <View style={styles.aboutInfoContainer}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>About {symbol.toUpperCase()}</Text>
+              <Pressable 
+                style={styles.seeMoreBtn}
+                onPress={()=>navigation.navigate('Modal')} 
+              >
+                <Text style={styles.seeMoreBtnText}>See All</Text>
+                <Image style={styles.leftArrow} source={RightArrowIcon} />
+              </Pressable>
+            </View>
+            <View style={styles.aboutInfoWrapper}>
+              <Text style={styles.aboutInfoFragmentText}>
+                Bitcoin (BTC) is a cryptocurrency . Users are able to generate BTC through the process of mining. Bitcoin has a current supply of 18,903,512. The last known price of Bitcoin is 47,090.57041302 USD and is down -1.95 over the last 24 hours. It is currently trading on 8198 active market(s) with $31,437,091,906.25 traded over the last 24 hours.
+              </Text>
+            </View>
           </View>
         </ScrollView>
       </View>
@@ -153,7 +204,7 @@ const styles = StyleSheet.create({
     marginBottom: 28,
   },
   priceLabel: {
-    fontSize: 14,
+    fontSize: 18,
     letterSpacing: 1.1,
     color: '#B1B1B1',
     marginBottom: 4,
@@ -166,7 +217,7 @@ const styles = StyleSheet.create({
   },
 
   currentPrice: {
-    fontSize: 28,
+    fontSize: 32,
     letterSpacing: 1.1,
     color: '#fff',
     marginRight: 8,
@@ -174,7 +225,7 @@ const styles = StyleSheet.create({
   },
 
   changePercentage: {
-    fontSize: 16,
+    fontSize: 20,
     lineHeight: 24,
     ...font.roboto.regular
   },
@@ -183,19 +234,91 @@ const styles = StyleSheet.create({
     marginBottom: 32,  
   },
 
-  statContainer: {
-    height: 182,
+  statsContainer: {
     marginBottom: 32,  
-    borderWidth: 1,
-    borderColor: '#fff',
-    borderStyle: 'solid',  
   },
 
-  aboutContainer: {
-    height: 182,
-    borderWidth: 1,
-    borderColor: '#fff',
-    borderStyle: 'solid',  
-  }
+  sectionHeader: {
+    borderBottomWidth: 1,
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    borderColor: 'rgba(255,255,255,0.15)',
+    borderStyle: 'solid', 
+    paddingBottom: 12,
+  },
 
+  sectionTitle: {
+    fontSize: 22,
+    color: '#fff',
+    ...font.roboto.bold
+  },
+
+  statsDetailContent: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingTop: 12,
+  },
+  statsDetailcolumn: {
+    flex: 1/2,
+  },
+
+  statsInfoItem: {
+    width: '100%',
+    marginBottom: 12,
+  },
+
+  statsInfoLabel: {
+    fontSize: 16,
+    color: '#B1B1B1',
+    marginBottom: 6,
+    ...font.roboto.regular
+  },
+
+  statsInfoValue: {
+    fontSize: 18,
+    color: '#fff',
+    ...font.roboto.bold
+  },
+
+  verticalDivider: {
+    width: 1,
+    height: '100%',
+    marginHorizontal: 20,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    alignSelf: 'flex-end',
+  },
+
+  seeMoreBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+
+  seeMoreBtnText: {
+    fontSize: 18,
+    color: '#B1B1B1',
+    ...font.roboto.regular
+  },
+
+  leftArrow: {
+    width: 12, 
+    height: 12,
+    marginLeft: 4,
+    transform: ([{ "rotate": '180deg'}]),
+  },
+
+  aboutInfoContainer: {},
+
+  aboutInfoWrapper: {
+    paddingVertical: 12, 
+  },
+
+  aboutInfoFragmentText: {
+    fontSize: 16,
+    lineHeight: 20,
+    letterSpacing: 0.5,
+    color: '#B1B1B1',
+    ...font.roboto.regular
+  }
 });

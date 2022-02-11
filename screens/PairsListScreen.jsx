@@ -5,8 +5,7 @@ import {
   Pressable, 
   Image, 
   FlatList } from 'react-native';
-import { Link } from '@react-navigation/native'
-;
+import { Link } from '@react-navigation/native';
 import ScreenViewWrapper from '../components/ScreenViewWrapper';
 import PairItem from '../components/PairItem';
 import font from '../constants/styleFonts';
@@ -30,10 +29,11 @@ const MockData = [
   "ethereum",
 ];
 
+const renderItem = ({ item:id }) => (
+  <Link key={id} to={{screen: 'PairDetail', params: { id }}} ><PairItem id={id}/></Link>
+);
+
 export default function PairsListScreen({ navigation }) {
-  const renderItem = ({ item:id }) => (
-    <Link key={id} to={{screen: 'PairDetail', params: { id }}} ><PairItem id={id}/></Link>
-  );
   return (
     <ScreenViewWrapper>
       <Text style={styles.header}>Markets</Text>
