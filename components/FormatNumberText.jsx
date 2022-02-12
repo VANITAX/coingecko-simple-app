@@ -99,6 +99,7 @@ FormatNumberText.propTypes = {
 };
 
 FormatNumberText.defaultProps = {
+  format: 'none',
   useColor: false,
   usePnMarker: false,
   prefix: '',

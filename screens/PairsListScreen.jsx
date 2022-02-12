@@ -6,14 +6,17 @@ import {
   Image, 
   FlatList } from 'react-native';
 import { Link } from '@react-navigation/native';
+
 import ScreenViewWrapper from '../components/ScreenViewWrapper';
 import PairItem from '../components/PairItem';
+
 import font from '../constants/styleFonts';
 
 import OptionsIcon from '../assets/images/options.png';
 import ExchangeIcon from '../assets/images/exchange.png';
 import ShareIcon from '../assets/images/share.png';
 import SearchIcon from '../assets/images/search.png';
+
 const MockData = [
   "bitcoin",
   "ethereum",
@@ -31,11 +34,15 @@ const MockData = [
   "ethereum",
 ];
 
-const renderItem = ({ item:id }) => (
-  <Link key={id} to={{screen: 'PairDetail', params: { id }}} ><PairItem id={id}/></Link>
-);
 
 export default function PairsListScreen({ navigation }) {
+
+  const renderItem = ({ item:id }) => (
+    <Link key={id} to={{screen: 'PairDetail', params: { id }}} >
+      <PairItem id={id}/>
+    </Link>
+  );
+
   return (
     <ScreenViewWrapper>
       <View style={styles.header}>
@@ -43,13 +50,13 @@ export default function PairsListScreen({ navigation }) {
         <View style={styles.tools}>
           <Pressable 
             style={styles.toolButton}
-            onPress={()=>navigation.navigate('Modal')} 
+            onPress={()=>navigation.navigate('Search')} 
           >
             <Image style={styles.toolIcon} source={SearchIcon} />
           </Pressable>
           <Pressable 
             style={styles.toolButton}
-            onPress={()=>navigation.navigate('Modal')} 
+            onPress={()=>navigation.navigate('AboutTarget')} 
           >
           <Image style={styles.toolIcon} source={ShareIcon} />
         </Pressable>
@@ -59,31 +66,32 @@ export default function PairsListScreen({ navigation }) {
       <View style={styles.filterContainer}>
         <Pressable 
           style={styles.filterButton}
-          onPress={()=>navigation.navigate('Modal')} 
+          onPress={()=>navigation.navigate('AboutTarget')} 
         >
           <Image style={styles.filterIcon} source={OptionsIcon} />
           <Text style={styles.filterButtonText}>By Cyrpto Rank</Text>
         </Pressable>
         <Pressable 
           style={styles.filterButton}
-          onPress={()=>navigation.navigate('Modal')} 
+          onPress={()=>navigation.navigate('AboutTarget')} 
         >
           <Image style={styles.filterIcon} source={ExchangeIcon} />
           <Text style={styles.filterButtonText}>USD</Text>
         </Pressable>
       </View>
-      <FlatList data={MockData} renderItem={renderItem} keyExtractor={item => item.id} />
+      <FlatList 
+        data={MockData} 
+        renderItem={renderItem} 
+        keyExtractor={(item, i) => (item + i)} 
+        onEndReached={()=>{}}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={null}
+      />
     </ScreenViewWrapper>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    paddingTop: 20,
-    paddingLeft: 20,
-    paddingRight: 20,
-    paddingBottom: 40,
-  },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -101,7 +109,6 @@ const styles = StyleSheet.create({
     marginLeft: 16
   },
   headerTitle: {
-    // width: '100%',
     color: '#fff', 
     fontSize: 40,
     ...font.roboto.bold

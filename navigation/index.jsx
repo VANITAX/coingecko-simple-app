@@ -9,8 +9,8 @@ import { Provider } from 'react-redux';
 import { View } from 'react-native';
 
 import store from '../reducers';
-import ModalScreen from '../screens/ModalScreen';
-import NotFoundScreen from '../screens/NotFoundScreen';
+import AboutScreen from '../screens/AboutScreen';
+import SearchScreen from '../screens/SearchScreen';
 import PairsListScreen from '../screens/PairsListScreen';
 import PairDetailScreen from '../screens/PairDetailScreen';
 
@@ -29,20 +29,19 @@ export default function Navigation() {
  * A root stack navigator is often used for displaying modals on top of all other content.
  * https://reactnavigation.org/docs/modal
  */
-const Stack = createNativeStackNavigator();
+const RootStack = createNativeStackNavigator();
 
 function RootNavigator() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen name="Root" component={PairsListScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="PairDetail" component={PairDetailScreen} options={{ headerShown: false }} />
-      {/* <Stack.Screen name="CurrencySelect" component={TabOneScreen} options={{ headerShown: false }} /> */}
-      {/* <Stack.Screen name="SortSelect" component={TabOneScreen} options={{ headerShown: false }} /> */}
-
-      <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
-      <Stack.Group screenOptions={{ presentation: 'modal' }}>
-        <Stack.Screen name="Modal" component={ModalScreen} />
-      </Stack.Group>
-    </Stack.Navigator>
+    <RootStack.Navigator>
+      <RootStack.Screen name="Root" component={PairsListScreen} options={{ headerShown: false }} />
+      <RootStack.Screen name="PairDetail" component={PairDetailScreen} options={{ headerShown: false }} />
+      {/* <RootStack.Screen name="CurrencySelect" component={TabOneScreen} options={{ headerShown: false }} /> */}
+      {/* <RootStack.Screen name="SortSelect" component={TabOneScreen} options={{ headerShown: false }} /> */}
+      <RootStack.Group screenOptions={{ presentation: 'modal' }}>
+        <RootStack.Screen name="AboutTarget" component={AboutScreen} options={{ headerShown: false }} />
+        <RootStack.Screen name="Search" component={SearchScreen} options={{ headerShown: false }} />
+      </RootStack.Group>
+    </RootStack.Navigator>
   );
 }

@@ -63,9 +63,9 @@ export default function PairItem({ navigation, id }) {
               value={current_price}
             />
             <FormatNumberText 
+              useColor
+              usePnMarker
               style={styles.changePercentage}
-              useColor={true}
-              usePnMarker={true}
               fixed={2}
               value={change_percentage}
               suffix="%"

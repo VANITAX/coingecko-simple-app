@@ -1,27 +1,36 @@
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Dimensions, StyleSheet, View } from 'react-native';
+import { useWindowDimensions, StyleSheet, View } from 'react-native';
+import PropTypes from 'prop-types';
 import React from 'react';
 
-const screenHeight = Dimensions.get('window').height;
-const SCREEN_PADDING_TOP = 20;
-
-export default function ScreenViewWrapper({ children, ...props }) {
+export default function ScreenViewWrapper({ children, isModalScreen, ...props }) {
+  const { height } = useWindowDimensions();
   const childrenNodes = React.Children.map(children, children=>children);
   const insert = useSafeAreaInsets();
-  const screenViewHeight = screenHeight - insert.top - SCREEN_PADDING_TOP;
+  const paddingTop = (!isModalScreen ? 20 : 0);
+  const screenViewHeight = height - insert.top - paddingTop;
     return (
       <SafeAreaView {...props}>
         <View style={
-          styles.container({screenViewHeight})
+          styles.container({ screenViewHeight, paddingTop })
         }>{childrenNodes}</View>
       </SafeAreaView>
     )
 }
 
 const styles = StyleSheet.create({
-   container: ({ screenViewHeight }) => ({
+   container: ({ screenViewHeight, paddingTop }) => ({
     height: screenViewHeight, 
-    paddingTop: SCREEN_PADDING_TOP,
+    paddingTop,
     paddingHorizontal: 20,
   }),
 });
+
+ScreenViewWrapper.propTypes = {
+  children: PropTypes.node.isRequired,
+  isModalScreen: PropTypes.bool,
+};
+
+ScreenViewWrapper.defaultProps = {
+  isModalScreen: false,
+};

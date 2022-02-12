@@ -1,13 +1,12 @@
-import { Dimensions,
-  StatusBar,
+import { 
   StyleSheet, 
   Text, 
   ScrollView,
   View, 
   Pressable, 
   Image, 
+  Linking,
   FlatList } from 'react-native';
-import { LineChart } from 'react-native-chart-kit';
 
 import ScreenViewWrapper from '../components/ScreenViewWrapper';
 import FormatNumberText from '../components/FormatNumberText';
@@ -17,8 +16,6 @@ import RightArrowIcon from '../assets/images/right-arrow.png';
 import ShareIcon from '../assets/images/share.png';
 
 import font from '../constants/styleFonts';
-
-import MockMarketData from '../mock_market_chart.json';
 
 const mockData = {
   "bitcoin": {
@@ -33,7 +30,6 @@ const mockData = {
     "price_change_percentage_24h": 1.68086,
   },
 }
-
 const {
   symbol, name, image, 
   current_price, 
@@ -51,7 +47,8 @@ const statsInfoItem = ({label, value}) => {
   )
 }
 
-export default function PairDetailScreen({ navigation }) {
+export default function PairDetailScreen({ navigation, route: {params} }) {
+  console.log(params.id);
   return (
     <ScreenViewWrapper>
       <View style={styles.header}>
@@ -83,8 +80,8 @@ export default function PairDetailScreen({ navigation }) {
               />
               <FormatNumberText 
                 style={styles.changePercentage}
-                useColor={true}
-                usePnMarker={true}
+                useColor
+                usePnMarker
                 fixed={2}
                 value={price_change_percentage_24h}
                 suffix="%"
@@ -108,9 +105,9 @@ export default function PairDetailScreen({ navigation }) {
               <Text style={styles.sectionTitle}>Statistics</Text>
               <Pressable 
                 style={styles.seeMoreBtn}
-                onPress={()=>navigation.navigate('Modal')} 
+                onPress={()=>Linking.openURL(`https://www.coingecko.com/en/coins/${params.id}`)} 
               >
-                <Text style={styles.seeMoreBtnText}>See All</Text>
+                <Text style={styles.seeMoreBtnText}>See More</Text>
                 <Image style={styles.leftArrow} source={RightArrowIcon} />
               </Pressable>
             </View>
@@ -137,14 +134,18 @@ export default function PairDetailScreen({ navigation }) {
               <Text style={styles.sectionTitle}>About {symbol.toUpperCase()}</Text>
               <Pressable 
                 style={styles.seeMoreBtn}
-                onPress={()=>navigation.navigate('Modal')} 
+                onPress={()=>navigation.navigate('AboutTarget')} 
               >
                 <Text style={styles.seeMoreBtnText}>See All</Text>
                 <Image style={styles.leftArrow} source={RightArrowIcon} />
               </Pressable>
             </View>
             <View style={styles.aboutInfoWrapper}>
-              <Text style={styles.aboutInfoFragmentText}>
+              <Text 
+                style={styles.aboutInfoFragmentText} 
+                numberOfLines={3} 
+                ellipsizeMode='tail'
+              >
                 Bitcoin (BTC) is a cryptocurrency . Users are able to generate BTC through the process of mining. Bitcoin has a current supply of 18,903,512. The last known price of Bitcoin is 47,090.57041302 USD and is down -1.95 over the last 24 hours. It is currently trading on 8198 active market(s) with $31,437,091,906.25 traded over the last 24 hours.
               </Text>
             </View>

@@ -1,12 +1,10 @@
 import { useCallback, useMemo } from 'react';
 import { LineChart } from 'react-native-chart-kit';
-import { Dimensions, View, Text, StyleSheet } from 'react-native';
+import { useWindowDimensions, View, Text, StyleSheet } from 'react-native';
 import FormatNumberText from '../components/FormatNumberText';
 import font from '../constants/styleFonts';
 
 const CHART_LINE_COLOR = '#6EF183';
-const INTERVAL = 5;
-const chartWidth = Dimensions.get('window').width + 70;
 
 const getDataHL = (data) => {
   const result = { high: null, low: null };
@@ -22,9 +20,12 @@ const getDataHL = (data) => {
   return result;
 }
 
+// temporary not supported for date range selection.
 export default function TrendLineChart({ data, style }) {
+  const { width } = useWindowDimensions();
   const color = useCallback(() => CHART_LINE_COLOR, []);
   const { high, low } = useMemo(()=> getDataHL(data),[data]);
+  const chartWidth = width + 70; // adding hardcode "70px" to fix chart library will not to auto filling width bug.
   return (
     <View style={styles.container}>
       <FormatNumberText
