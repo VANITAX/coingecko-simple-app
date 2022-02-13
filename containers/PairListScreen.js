@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import PairsListScreen from '../screens/PairsListScreen';
 
-import fetchCoinMarketFinance from '../actions/fetchCoinMarketFinance';
+import fetchCoinMarketFinanceList from '../actions/fetchCoinMarketFinanceList';
 
 const NETWORK_KEY_PATH = ['list', 'market_finance'];
 
@@ -16,12 +16,12 @@ const mapStateToProps = (state) => {
   };
 }
 const mapDispatchToProps = dispatch => ({
-  fetchMarketFinance: ({
-    currency,
+  fetchCoinFinanceList: ({
+    vs_currency,
     order,
     page,
-  }) => dispatch(fetchCoinMarketFinance({
-    vs_currency: currency,
+  }) => dispatch(fetchCoinMarketFinanceList({
+    vs_currency,
     order,
     page,
     networkKeyPath: NETWORK_KEY_PATH,

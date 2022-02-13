@@ -2,9 +2,11 @@ import { useCallback, useMemo } from 'react';
 import { LineChart } from 'react-native-chart-kit';
 import { useWindowDimensions, View, Text, StyleSheet } from 'react-native';
 import FormatNumberText from '../components/FormatNumberText';
+import Spinner from '../components/Spinner';
 import font from '../constants/styleFonts';
 
 const CHART_LINE_COLOR = '#6EF183';
+const CHART_HEIGHT = 150;
 
 const getDataHL = (data) => {
   const result = { high: null, low: null };
@@ -20,8 +22,14 @@ const getDataHL = (data) => {
   return result;
 }
 
+const renderLoading = () => (
+  <View style={styles.loading}>
+    <Spinner />
+  </View>
+)
+
 // temporary not supported for date range selection.
-export default function TrendLineChart({ data, style }) {
+export default function TrendLineChart({ data, style, isFetching }) {
   const { width } = useWindowDimensions();
   const color = useCallback(() => CHART_LINE_COLOR, []);
   const { high, low } = useMemo(()=> getDataHL(data),[data]);
@@ -31,32 +39,35 @@ export default function TrendLineChart({ data, style }) {
       <FormatNumberText
         style={[styles.hlPriceLabel, styles.highPrice]}
         prefix="$" 
-        fixed={2}
+        fixed={3}
         format="commas" 
         value={high}
       />
-      <LineChart
-        data={{
-          datasets: [{ data }],
-        }}
-        width={chartWidth}
-        height={150}
-        withDots={false}
-        withVerticalLabels={false}
-        withHorizontalLabels={false}
-        withHorizontalLines={false}
-        withVerticalLines={false}
-        withOuterLines={false}
-        withShadow={false}
-        chartConfig={{color}}
-        style={styles.chart}
-        bezier
-      />
+      { isFetching
+        ? renderLoading()
+        : <LineChart
+            data={{
+              datasets: [{ data }],
+            }}
+            width={chartWidth}
+            height={CHART_HEIGHT}
+            withDots={false}
+            withVerticalLabels={false}
+            withHorizontalLabels={false}
+            withHorizontalLines={false}
+            withVerticalLines={false}
+            withOuterLines={false}
+            withShadow={false}
+            chartConfig={{color}}
+            style={styles.chart}
+            bezier
+          />
+      }
       <View style={styles.chartFooter}>
         <FormatNumberText
           style={[styles.hlPriceLabel, styles.lowPrice]}
           prefix="$" 
-          fixed={2}
+          fixed={3}
           format="commas" 
           value={low}
         />
@@ -96,5 +107,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#B1B1B1',
     ...font.roboto.regular
+  },
+  loading: {
+    height: CHART_HEIGHT,
+    alignItems: 'center',
+    justifyContent: 'center',
   }
 })

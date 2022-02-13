@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import PairItem from '../components/PairItem';
 
-import fetchCoinMarketFinance from '../actions/fetchCoinMarketFinance';
+import fetchCoinMarketFinanceList from '../actions/fetchCoinMarketFinanceList';
 
 const mapStateToProps = (state, { dataKey }) => {
   return {

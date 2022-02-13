@@ -2,16 +2,19 @@ import {
   StyleSheet, 
   Text, 
   View, 
+  RefreshControl,
   Pressable, 
   Image, 
   Linking,
   FlatList } from 'react-native';
 import { Link } from '@react-navigation/native';
-import { useEffect } from 'react';
+import { useEffect, useCallback, useMemo } from 'react';
 
 import FiltersColumn from '../containers/FiltersColumn';
-import ScreenViewWrapper from '../components/ScreenViewWrapper';
 import PairItem from '../containers/PairItem';
+
+import ScreenViewWrapper from '../components/ScreenViewWrapper';
+import Spinner from '../components/Spinner';
 
 import font from '../constants/styleFonts';
 
@@ -24,24 +27,45 @@ const renderItem = ({ item: dataKey }) => (
   </Link>
 );
 
+const renderLoading = () => (
+  <View style={styles.loading}>
+    <Spinner />
+  </View>
+);
+
 export default function PairsListScreen({ 
   navigation, 
   pairItemIds,
   nextPage,
   lastPage,
   isFetching,
-  fetchMarketFinance,
+  fetchCoinFinanceList,
   currency,
   sorting
 }) {
 
-  useEffect(()=> {
-    fetchMarketFinance({
-      currency,
-      order: currency,
+  const fetchData = useCallback(() => 
+    fetchCoinFinanceList({
+      vs_currency: currency,
+      order: sorting,
       page: 1,
-    });
-  },[]);
+    }),[currency, sorting])
+
+  const fetchNext = useCallback(() => 
+    fetchCoinFinanceList({
+      vs_currency: currency,
+      order: sorting,
+      page: nextPage,
+    }),[currency, sorting, nextPage])
+
+  const renderPairItem = useMemo(()=>renderItem, [currency, sorting])
+
+  useEffect(() => 
+    fetchData(),
+    [currency, sorting]
+  );
+  
+
 
   return (
     <ScreenViewWrapper>
@@ -73,12 +97,19 @@ export default function PairsListScreen({
         ? <FlatList
             style={styles.list}
             data={pairItemIds} 
-            renderItem={renderItem} 
+            renderItem={renderPairItem} 
+            initialNumToRender={15}
             keyExtractor={item => item} 
-            refreshing={isFetching}
-            // onEndReached={()=>{}}
-            // onEndReachedThreshold={0.5}
-            // ListFooterComponent={null}
+            refreshControl={
+            <RefreshControl
+              tintColor="#fff"
+              refreshing={isFetching}
+              onRefresh={fetchData}
+            />
+          }
+            onEndReached={fetchNext}
+            onEndReachedThreshold={1}
+            ListFooterComponent={renderLoading()}
           />
         : null}
     </ScreenViewWrapper>
@@ -111,5 +142,10 @@ const styles = StyleSheet.create({
   },
   list: {
     marginTop: 12,
+  },
+  loading: {
+    height: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
   }
 });

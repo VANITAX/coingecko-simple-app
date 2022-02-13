@@ -6,7 +6,9 @@ import {
   Pressable, 
   Image, 
   Linking,
+  RefreshControl,
   FlatList } from 'react-native';
+import { useEffect, useMemo } from 'react';
 
 import ScreenViewWrapper from '../components/ScreenViewWrapper';
 import FormatNumberText from '../components/FormatNumberText';
@@ -17,27 +19,6 @@ import ShareIcon from '../assets/images/share.png';
 
 import font from '../constants/styleFonts';
 
-const mockData = {
-  "bitcoin": {
-    "id": "bitcoin",
-    "symbol": "btc",
-    "name": "Bitcoin",
-    "image": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579",
-    "current_price": 42452,
-    "market_cap": 805206641889,
-    "market_cap_rank": 1,
-    "price_change_24h": 701.75,
-    "price_change_percentage_24h": 1.68086,
-  },
-}
-const {
-  symbol, name, image, 
-  current_price, 
-  market_cap, 
-  market_cap_rank, 
-  price_change_percentage_24h
-} = mockData["bitcoin"];
-
 const statsInfoItem = ({label, value}) => {
   return (
     <View style={styles.statsInfoItem}>
@@ -47,16 +28,46 @@ const statsInfoItem = ({label, value}) => {
   )
 }
 
+const chartDataWithoutTimestamp = data => data?.map(([timestamp, value]) => value) || [];
+
 export default function PairDetailScreen({ 
-  navigation, route: {params} 
+  navigation, dataKey, id,
+  symbol, name, image, current_price,
+  market_cap, market_cap_rank,
+  price_change_percentage_24h,
+  fully_diluted_valuation, chartData,
+  high_24h, low_24h, all_time_high, all_time_low,
+  total_volume, max_supply, total_supply, circulating_supply,
+  last_updated, vs_currency, description, 
+  fetchCoinDetail, fetchCoinFinance, fetchCoinFinanceGraph,
+  isDetailsFetching, isFinanceFetching, isFinanceGraphFetching
 }) {
+
+  useEffect(()=> {
+    fetchCoinDetail({ coin_id: id });
+    fetchCoinFinanceGraph({coin_id: id , vs_currency})
+  },[id]);
+
+  const onRefresh = () => {
+    fetchCoinDetail({ coin_id: id });
+    fetchCoinFinance({coin_id: id , vs_currency});
+    fetchCoinFinanceGraph({coin_id: id , vs_currency});
+  }
+
+  const pricePointData = useMemo(()=>
+    chartDataWithoutTimestamp(chartData), 
+    [chartData]);
+  const pairName = `${symbol}/${vs_currency}`.toUpperCase();
+  const uppercaseSymbol = symbol.toUpperCase();
+  const lastUpdated = last_updated.split('T')[0];
+  const isAllDataFetching = isFinanceFetching && isDetailsFetching && isFinanceGraphFetching;
   return (
     <ScreenViewWrapper>
       <View style={styles.header}>
         <Pressable onPress={()=>navigation.goBack()}>
           <Image style={styles.headerIcon} source={RightArrowIcon} />
         </Pressable>
-        <Text style={styles.headerTitle}>{symbol.toUpperCase()}</Text>
+        <Text style={styles.headerTitle}>{uppercaseSymbol}</Text>
         <Pressable>
           <Image style={styles.headerIcon} source={ShareIcon} />
         </Pressable>
@@ -65,11 +76,18 @@ export default function PairDetailScreen({
         <Image style={styles.logo} source={{url: image}} />
         <View>
           <Text style={styles.title}>{name}</Text>
-          <Text style={styles.subtitle}>{symbol.toUpperCase()}/USD</Text>
+          <Text style={styles.subtitle}>{pairName}</Text>
         </View>
       </View>
       <View style={styles.scrollView} >
-        <ScrollView >
+        <ScrollView 
+          refreshControl={
+            <RefreshControl
+              tintColor="#fff"
+              refreshing={isAllDataFetching}
+              onRefresh={onRefresh}
+            />
+          }>
           <View style={styles.priceContainer}>
             <Text style={styles.priceLabel}>Price</Text>
             <View style={styles.priceRow}>
@@ -90,23 +108,17 @@ export default function PairDetailScreen({
             </View>
           </View>
           <View style={styles.graphContainer}>
-           <TrendLineChart style={styles.graphContainer} data={[
-              41673.8395543094, 
-              41493.690050910525,
-              42475.543220951215,
-              43910.929986443094,
-              44184.447511676175, 
-              44383.88805541707,
-              43628.13953235228, 
-              43174.37014223908,
-          ]}/>
+          <TrendLineChart 
+            style={styles.graphContainer} 
+            isFetching={isFinanceGraphFetching} 
+            data={pricePointData}/>
           </View>
           <View style={styles.statsContainer}>
             <View style={styles.sectionHeader}>
               <Text style={styles.sectionTitle}>Statistics</Text>
               <Pressable 
                 style={styles.seeMoreBtn}
-                onPress={()=>Linking.openURL(`https://www.coingecko.com/en/coins/${params.id}`)} 
+                onPress={()=>Linking.openURL(`https://www.coingecko.com/en/coins/${id}`)} 
               >
                 <Text style={styles.seeMoreBtnText}>See More</Text>
                 <Image style={styles.leftArrow} source={RightArrowIcon} />
@@ -114,25 +126,57 @@ export default function PairDetailScreen({
             </View>
             <View style={styles.statsDetailContent}>
               <View style={styles.statsDetailcolumn}>
-                {statsInfoItem({label: 'Market Cap', value: 'US$786.64 Bn'})}
-                {statsInfoItem({label: 'Volume 24h', value: 'US$786.64 Bn'})}
-                {statsInfoItem({label: 'Max Supply', value: '21 M BTC'})}
-                {statsInfoItem({label: 'All Time High', value: 'US$68,788.63'})}
-                {statsInfoItem({label: 'All Time Low', value: 'US$65.53'})}
+                {statsInfoItem({
+                  label: 'Market Cap', 
+                  value: (<FormatNumberText prefix="$" format="metric" fixed={2} value={market_cap}/>)
+                })}
+                {statsInfoItem({
+                  label: 'Total Volume', 
+                  value: (<FormatNumberText prefix="$" format="metric" fixed={2} value={total_volume}/>)
+                })}
+                {statsInfoItem({
+                  label: 'Max Supply', 
+                  value: (<FormatNumberText format="metric" fixed={2} value={max_supply}/>)
+                })}
+                 {statsInfoItem({
+                  label: '24h High', 
+                  value: (<FormatNumberText prefix="$" format="commas" value={high_24h}/>)
+                })}
+                {statsInfoItem({
+                  label: 'All Time High', 
+                  value: (<FormatNumberText prefix="$" format="commas" value={all_time_high}/>)
+                })}
+                {statsInfoItem({label: 'Rank', value: `#${market_cap_rank}`})}
               </View>
               <View style={styles.verticalDivider} />
               <View style={styles.statsDetailcolumn}>
-                {statsInfoItem({label: 'Fully Diluted Market Cap', value: 'US$871.264 Bn'})}
-                {statsInfoItem({label: 'Circulating Supply', value: '18.95 M BTC'})}
-                {statsInfoItem({label: 'Total Supply', value: '18.95 M BTC'})}
-                {statsInfoItem({label: 'Rank', value: '#1'})}
-                {statsInfoItem({label: 'Market Dominance', value: '41.62%'})}
+                {statsInfoItem({
+                  label: 'Fully Diluted Valuation', 
+                  value: (<FormatNumberText prefix="$" format="metric" fixed={2} value={fully_diluted_valuation}/>)
+                })}
+                {statsInfoItem({
+                  label: 'Circulating Supply', 
+                  value: (<FormatNumberText prefix="$" format="metric" fixed={2} value={circulating_supply}/>)
+                })}
+                {statsInfoItem({
+                  label: 'Total Supply', 
+                  value: (<FormatNumberText prefix="$" format="metric" fixed={2} value={total_supply}/>)
+                })}
+                {statsInfoItem({
+                  label: '24h Low', 
+                  value: (<FormatNumberText prefix="$" format="commas" value={low_24h}/>)
+                })}
+                {statsInfoItem({
+                  label: 'All Time Low', 
+                  value: (<FormatNumberText prefix="$" format="commas" value={all_time_low}/>)
+                })}
+                {statsInfoItem({label: 'Last Updated', value: lastUpdated})}
               </View>
             </View>
           </View>
           <View style={styles.aboutInfoContainer}>
             <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>About {symbol.toUpperCase()}</Text>
+              <Text style={styles.sectionTitle}>About {uppercaseSymbol}</Text>
               <Pressable 
                 style={styles.seeMoreBtn}
                 onPress={()=>navigation.navigate('AboutTarget')} 
@@ -146,8 +190,7 @@ export default function PairDetailScreen({
                 style={styles.aboutInfoFragmentText} 
                 numberOfLines={3} 
                 ellipsizeMode='tail'
-              >
-                Bitcoin (BTC) is a cryptocurrency . Users are able to generate BTC through the process of mining. Bitcoin has a current supply of 18,903,512. The last known price of Bitcoin is 47,090.57041302 USD and is down -1.95 over the last 24 hours. It is currently trading on 8198 active market(s) with $31,437,091,906.25 traded over the last 24 hours.
+              >{description}
               </Text>
             </View>
           </View>

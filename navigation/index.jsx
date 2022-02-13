@@ -11,7 +11,7 @@ import { View } from 'react-native';
 import configureStore from '../reducers/configureStore';
 
 import PairsListScreen from '../containers/PairListScreen';
-import PairDetailScreen from '../screens/PairDetailScreen';
+import PairDetailScreen from '../containers/PairDetaileScreen';
 import SearchScreen from '../screens/SearchScreen';
 import AboutScreen from '../screens/AboutScreen';
 

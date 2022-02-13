@@ -17,9 +17,9 @@ export default (state = defaultState, action) => {
 /**
  * Add Coin Data
  * @kind reducer/actionType
- * @name ADD_PAIR_DATA
+ * @name ADD_COIN_DATA
  * @param {object} coin - coin
  * @param {string} coin.id - coin id
  * @return {Immutable.Map} New state
  */
-const _ADD_PAIR_DATA = coin => state => state.mergeDeep({ [coin.id]: coin });
+const _ADD_COIN_DATA = coin => state => state.mergeIn([coin.id], coin);

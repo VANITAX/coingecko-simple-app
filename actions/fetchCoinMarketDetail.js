@@ -1,62 +1,41 @@
 import {
-  ADD_PAIR_DATA,
+  ADD_COIN_DATA,
   SET_NETWORKING_FETCHING,
   SET_NETWORKING_SUCCESS,
   SET_NETWORKING_ERROR,
 } from '../constants/actionTypes';
 import { API_BASE_URL } from '../config/config';
 
-const API_END_POINT = '/coins/markets';
-
-
-const fetchCoinMarketPairs = ({
-  vs_currency = 'usd',
-  id = '',
-  category = '',
-  order = '',
-  per_page = DEFAULT_PAGE_LIMIT,
-  page = 1,
+const fetchCoinMarketDetail = ({
+  coin_id = '',
+  localization = false,
+  tickers = false,
+  market_data = false,
+  community_data = false,
+  developer_data = false,
+  sparkline = false,
   networkKeyPath = []
 } = {}) => async dispatch => {
-    const idsString = ids.toString();
-    const requestUrl = new URL(`/coins/${}`, API_BASE_URL);
-    requestUrl.searchParams.append('vs_currency', vs_currency);
-    requestUrl.searchParams.append('ids', idsString);
-    requestUrl.searchParams.append('per_page', per_page);
-    requestUrl.searchParams.append('page', page);
-    if(order && order !== 'rank') {
-      // rank is default order, but coingecko api not provide relate params. see more: https://www.coingecko.com/en/api/documentation;
-      requestUrl.searchParams.append('order', order);
-    }
-    if(category) requestUrl.searchParams.append('category', category);
+
+    const requestUrl = new URL(`/coins/${coin_id}`, API_BASE_URL);
+    requestUrl.searchParams.append('localization', localization);
+    requestUrl.searchParams.append('tickers', tickers);
+    requestUrl.searchParams.append('market_data', market_data);
+    requestUrl.searchParams.append('community_data', community_data);
+    requestUrl.searchParams.append('developer_data', developer_data);
+    requestUrl.searchParams.append('sparkline', sparkline);
 
     dispatch({ type: SET_NETWORKING_FETCHING, payload: { keyPath: networkKeyPath } });
 
     try{
-      const response = await fetch(requestUrl);
-      const result = await response.json();
+      const result = await fetch(requestUrl);
+      const coinDetailData = await result.json();
 
-      const itemIds = [];
-      const pairsData = result.map(({id, ...pairData}) => {
-        if(id) {
-          const dataKey = `${id}:${vs_currency}`;
-          itemIds.push(dataKey);
-          return {
-            ...pairData,
-            vs_currency,
-            dataKey
-          }
-        }
+      dispatch({
+        type: ADD_COIN_DATA, 
+        payload: coinDetailData,
       });
-      const pairItems = objectifyArrayById({ array: pairsData ,keyAsId: 'dataKey'});
-      const nextPage = page + 1;
 
-      // dispatch({
-      //   type: ADD_PAIRS_DATA, 
-      //   payload: {
-      //     pairs: pairItems
-      //   }
-      // });
       return dispatch({ type: SET_NETWORKING_SUCCESS, payload: { keyPath: networkKeyPath } });
     }catch(error){
       return dispatch({
@@ -67,4 +46,4 @@ const fetchCoinMarketPairs = ({
 };
 
 
-export default fetchCoinMarketPairs;
+export default fetchCoinMarketDetail;
