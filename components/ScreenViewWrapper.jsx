@@ -28,10 +28,11 @@ const styles = StyleSheet.create({
 });
 
 ScreenViewWrapper.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
   isModalScreen: PropTypes.bool,
 };
 
 ScreenViewWrapper.defaultProps = {
+  children: null,
   isModalScreen: false,
 };

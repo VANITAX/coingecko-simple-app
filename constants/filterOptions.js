@@ -3,29 +3,29 @@ export const sortOptions = [
     id: 'rank',
     desc: 'Market Cap Rank'
   },
-  {
-    id: 'id_asc',
-    desc: 'Name increase'
-  },
+  // {
+  //   id: 'id_asc',
+  //   desc: 'Name ↑'
+  // },
   {
     id: 'id_desc',
-    desc: 'Name decrease'
+    desc: 'Name ↓'
   },
   {
     id: 'market_cap_asc',
-    desc: 'Market Cap increase'
+    desc: 'Market Cap ↑'
   },
   {
     id: 'market_cap_desc',
-    desc: 'Market Cap decrease'
+    desc: 'Market Cap ↓'
   },
   {
     id: 'volume_asc',
-    desc: 'Volume increase'
+    desc: 'Volume ↑'
   },
   {
     id: 'volume_desc',
-    desc: 'Volume decrease'
+    desc: 'Volume ↓'
   },
 ];
 

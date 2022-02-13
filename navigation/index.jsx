@@ -13,7 +13,8 @@ import configureStore from '../reducers/configureStore';
 import PairsListScreen from '../containers/PairListScreen';
 import PairDetailScreen from '../containers/PairDetaileScreen';
 import SearchScreen from '../containers/SearchScreen';
-import AboutScreen from '../screens/AboutScreen';
+import AboutScreen from '../containers/AboutScreen';
+import FilterSelectScreen from '../containers/FilterSelectScreen';
 
 const store = configureStore();
 
@@ -39,10 +40,18 @@ function RootNavigator() {
       <RootStack.Screen name="Root" component={PairsListScreen} options={{ headerShown: false }} />
       <RootStack.Screen name="PairDetail" component={PairDetailScreen} options={{ headerShown: false }} />
       <RootStack.Screen name="Search" component={SearchScreen} options={{ headerShown: false }} />
-      {/* <RootStack.Screen name="CurrencySelect" component={TabOneScreen} options={{ headerShown: false }} /> */}
-      {/* <RootStack.Screen name="SortSelect" component={TabOneScreen} options={{ headerShown: false }} /> */}
       <RootStack.Group screenOptions={{ presentation: 'modal' }}>
         <RootStack.Screen name="AboutTarget" component={AboutScreen} options={{ headerShown: false }} />
+        <RootStack.Screen name="CurrencySelect" 
+          component={FilterSelectScreen} 
+          options={{ headerShown: false }} 
+          initialParams={{ filterKind: 'currency' }} />
+        <RootStack.Screen 
+          name="SortSelect" 
+          component={FilterSelectScreen} 
+          options={{ headerShown: false }} 
+          initialParams={{ filterKind: 'sort_by' }}
+        />
       </RootStack.Group>
     </RootStack.Navigator>
   );

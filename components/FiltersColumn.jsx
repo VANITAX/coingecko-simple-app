@@ -24,6 +24,7 @@ const getSortOptionsDesc = (sortId) => {
 };
 
 export default function FilterColumn({
+  screen,
   sorting,
   currency,
   useSortSelector,
@@ -40,7 +41,7 @@ export default function FilterColumn({
       { useSortSelector ? 
         <Pressable 
           style={styles.filterButton}
-          onPress={()=>navigation.navigate('AboutTarget')} 
+          onPress={()=>navigation.navigate('SortSelect', { screen })} 
         >
           <Image style={styles.filterIcon} source={OptionsIcon} />
           <Text style={styles.filterButtonText}>By {optionDesc}</Text>
@@ -49,7 +50,7 @@ export default function FilterColumn({
       { useCurrencySelector ? 
         <Pressable 
           style={styles.filterButton}
-          onPress={()=>navigation.navigate('AboutTarget')} 
+          onPress={()=>navigation.navigate('CurrencySelect',{ screen })} 
         >
           <Image style={styles.filterIcon} source={ExchangeIcon} />
           <Text style={styles.filterButtonText}>{currency.toUpperCase()}</Text>

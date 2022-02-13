@@ -37,7 +37,7 @@ export default (state = defaultState, action) => {
  * @return {Immutable.Map} New state
  */
 const _SET_FILTER_OPTION = ({
-  screen = 'list',
-  filter = 'sort_by',
+  screen,
+  filter,
   value
-}) => state => state.setIn(['screen', 'filter'] ,value);
+}) => state => state.setIn([screen, filter] ,value);
