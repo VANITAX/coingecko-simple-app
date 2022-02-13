@@ -8,19 +8,21 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Provider } from 'react-redux';
 import { View } from 'react-native';
 
-import store from '../reducers';
-import AboutScreen from '../screens/AboutScreen';
-import SearchScreen from '../screens/SearchScreen';
-import PairsListScreen from '../screens/PairsListScreen';
-import PairDetailScreen from '../screens/PairDetailScreen';
+import configureStore from '../reducers/configureStore';
 
+import PairsListScreen from '../containers/PairListScreen';
+import PairDetailScreen from '../screens/PairDetailScreen';
+import SearchScreen from '../screens/SearchScreen';
+import AboutScreen from '../screens/AboutScreen';
+
+const store = configureStore();
 
 export default function Navigation() {
   return (
     <Provider store={store}>
-        <NavigationContainer theme={DarkTheme}>
-          <RootNavigator />
-        </NavigationContainer>
+      <NavigationContainer theme={DarkTheme}>
+        <RootNavigator />
+      </NavigationContainer>
     </Provider>
   );
 }

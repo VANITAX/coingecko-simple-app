@@ -47,8 +47,9 @@ const statsInfoItem = ({label, value}) => {
   )
 }
 
-export default function PairDetailScreen({ navigation, route: {params} }) {
-  console.log(params.id);
+export default function PairDetailScreen({ 
+  navigation, route: {params} 
+}) {
   return (
     <ScreenViewWrapper>
       <View style={styles.header}>

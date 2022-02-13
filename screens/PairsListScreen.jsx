@@ -4,44 +4,44 @@ import {
   View, 
   Pressable, 
   Image, 
+  Linking,
   FlatList } from 'react-native';
 import { Link } from '@react-navigation/native';
+import { useEffect } from 'react';
 
+import FiltersColumn from '../containers/FiltersColumn';
 import ScreenViewWrapper from '../components/ScreenViewWrapper';
-import PairItem from '../components/PairItem';
+import PairItem from '../containers/PairItem';
 
 import font from '../constants/styleFonts';
 
-import OptionsIcon from '../assets/images/options.png';
-import ExchangeIcon from '../assets/images/exchange.png';
 import ShareIcon from '../assets/images/share.png';
 import SearchIcon from '../assets/images/search.png';
 
-const MockData = [
-  "bitcoin",
-  "ethereum",
-  "ethereum",
-  "ethereum",
-  "ethereum",
-  "ethereum",
-  "ethereum",
-  "ethereum",
-  "ethereum",
-  "ethereum",
-  "ethereum",
-  "ethereum",
-  "ethereum",
-  "ethereum",
-];
+const renderItem = ({ item: dataKey }) => (
+  <Link key={dataKey} to={{screen: 'PairDetail', params: { dataKey: dataKey }}} >
+    <PairItem dataKey={dataKey}/>
+  </Link>
+);
 
+export default function PairsListScreen({ 
+  navigation, 
+  pairItemIds,
+  nextPage,
+  lastPage,
+  isFetching,
+  fetchMarketFinance,
+  currency,
+  sorting
+}) {
 
-export default function PairsListScreen({ navigation }) {
-
-  const renderItem = ({ item:id }) => (
-    <Link key={id} to={{screen: 'PairDetail', params: { id }}} >
-      <PairItem id={id}/>
-    </Link>
-  );
+  useEffect(()=> {
+    fetchMarketFinance({
+      currency,
+      order: currency,
+      page: 1,
+    });
+  },[]);
 
   return (
     <ScreenViewWrapper>
@@ -56,40 +56,36 @@ export default function PairsListScreen({ navigation }) {
           </Pressable>
           <Pressable 
             style={styles.toolButton}
-            onPress={()=>navigation.navigate('AboutTarget')} 
+            onPress={()=>{
+              Linking.openURL('https://twitter.com/intent/tweet?text=123456789012345678901234567890%0A123456789012345678901234567890%0A123456789012345678901234567890')
+            }} 
           >
           <Image style={styles.toolIcon} source={ShareIcon} />
         </Pressable>
         </View>
       </View>
-      
-      <View style={styles.filterContainer}>
-        <Pressable 
-          style={styles.filterButton}
-          onPress={()=>navigation.navigate('AboutTarget')} 
-        >
-          <Image style={styles.filterIcon} source={OptionsIcon} />
-          <Text style={styles.filterButtonText}>By Cyrpto Rank</Text>
-        </Pressable>
-        <Pressable 
-          style={styles.filterButton}
-          onPress={()=>navigation.navigate('AboutTarget')} 
-        >
-          <Image style={styles.filterIcon} source={ExchangeIcon} />
-          <Text style={styles.filterButtonText}>USD</Text>
-        </Pressable>
-      </View>
-      <FlatList 
-        data={MockData} 
-        renderItem={renderItem} 
-        keyExtractor={(item, i) => (item + i)} 
-        onEndReached={()=>{}}
-        onEndReachedThreshold={0.5}
-        ListFooterComponent={null}
+      <FiltersColumn 
+        screen="list" 
+        useSortSelector 
+        useCurrencySelector
       />
+      { !!pairItemIds.length
+        ? <FlatList
+            style={styles.list}
+            data={pairItemIds} 
+            renderItem={renderItem} 
+            keyExtractor={item => item} 
+            refreshing={isFetching}
+            // onEndReached={()=>{}}
+            // onEndReachedThreshold={0.5}
+            // ListFooterComponent={null}
+          />
+        : null}
     </ScreenViewWrapper>
   );
 }
+
+
 
 const styles = StyleSheet.create({
   header: {
@@ -113,29 +109,7 @@ const styles = StyleSheet.create({
     fontSize: 40,
     ...font.roboto.bold
   },
-  filterContainer: {
-    flexDirection: 'row',
-    marginBottom: 32,
-  },
-  filterButton: {
-    alignSelf: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    backgroundColor: '#232323',
-    borderRadius: 30,
-    marginRight: 12,
-  },
-  filterButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    ...font.roboto.regular
-  },
-  filterIcon: {
-    width: 16,
-    height: 16,
-    marginRight: 6,
+  list: {
+    marginTop: 12,
   }
 });

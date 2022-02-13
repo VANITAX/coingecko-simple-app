@@ -6,18 +6,12 @@ import Navigation from './navigation';
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
+  if (!isLoadingComplete) return null;
 
-  if (!isLoadingComplete) {
-    return null;
-
-  } else {
-
-    return (
-      <SafeAreaProvider>
-        <Navigation />
-        <StatusBar style="light"/>
-      </SafeAreaProvider>
-    );
-
-  }
+  return (
+    <SafeAreaProvider>
+      <Navigation />
+      <StatusBar style="light"/>
+    </SafeAreaProvider>
+  );
 }

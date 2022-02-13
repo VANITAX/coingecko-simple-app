@@ -10,6 +10,7 @@ import {
 import { useState, useCallback } from 'react';
 import { useNavigation } from '@react-navigation/native';
 
+import FiltersColumn from '../containers/FiltersColumn';
 import ScreenViewWrapper from '../components/ScreenViewWrapper';
 import PairItem from '../components/PairItem';
 
@@ -62,7 +63,12 @@ export default function SearchScreen({ navigation }){
           <Image style={styles.headerIcon} source={CloseIcon} />
         </Pressable>
       </View>
+      <FiltersColumn 
+        screen="search" 
+        useCurrencySelector
+      />
       <FlatList 
+        style={styles.list}
         data={MockData} 
         renderItem={renderItem} 
         keyExtractor={id => id} 
@@ -79,7 +85,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 32,
+    paddingBottom: 38,
   },
   headerIcon: {
     width: 22,
@@ -109,10 +115,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     ...font.roboto.regular
   },
-
-
-
-  content: {
-    color: '#fff'
+  list: {
+    marginTop: 12,
   }
 });

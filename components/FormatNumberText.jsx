@@ -55,13 +55,12 @@ export default function FormatNumberText ({
 
     // need to transform to Number first.
     if(typeof value !== "number") return null;
-
     let result = Math.abs(value);
     const ownStyle = [style];
     const isPositiveNum = value > 0;
 
     if(fixed) {
-      result = value.toFixed(fixed);
+      result = result.toFixed(fixed);
     }
 
     if(format !== 'none') {
@@ -74,7 +73,6 @@ export default function FormatNumberText ({
     }else{
       result = `${prefix}${result}`;
     }
-
     if(suffix && format !== 'metric') {
       result = `${result}${suffix}`;
     }

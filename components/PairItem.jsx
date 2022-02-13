@@ -5,39 +5,16 @@ import font from '../constants/styleFonts';
 
 import FormatNumberText from './FormatNumberText';
 
-const mockData = {
-  "bitcoin": {
-    "id": "bitcoin",
-    "symbol": "btc",
-    "name": "Bitcoin",
-    "image": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579",
-    "current_price": 42452,
-    "market_cap": 805206641889,
-    "market_cap_rank": 1,
-    "price_change_24h": 701.75,
-    "price_change_percentage_24h": 15.68086,
-  },
-  "ethereum": {
-    "id": "ethereum",
-    "symbol": "eth",
-    "name": "Ethereum",
-    "image": "https://assets.coingecko.com/coins/images/279/large/ethereum.png?1595348880",
-    "current_price": 3183.02,
-    "market_cap": 379737669172,
-    "market_cap_rank": 2,
-    "price_change_24h": 176.18,
-    "price_change_percentage_24h": 5.85932,
-  },
-}
-
-export default function PairItem({ navigation, id }) {
-  const {
-    symbol, name, image, 
-    current_price, 
-    market_cap, 
-    market_cap_rank, 
-    price_change_percentage_24h: change_percentage
-  } = mockData[id];
+export default function PairItem({ 
+  id,
+  dataKey,
+  symbol, name, image, 
+  current_price, 
+  market_cap, 
+  market_cap_rank, 
+  price_change_percentage_24h: change_percentage
+}) {
+  if(!id) return null;
 
   return (
     <View style={styles.container}>
@@ -59,6 +36,7 @@ export default function PairItem({ navigation, id }) {
             <FormatNumberText 
               style={styles.primary} 
               prefix="$" 
+              fixed={5}
               format="commas" 
               value={current_price}
             />
@@ -84,7 +62,8 @@ export default function PairItem({ navigation, id }) {
 }
 
 PairItem.propTypes = {
-  id: PropTypes.string.isRequired,
+  dataKey: PropTypes.string.isRequired,
+  id: PropTypes.string,
   symbol: PropTypes.string,
   name: PropTypes.string, 
   image: PropTypes.string, 
@@ -142,13 +121,3 @@ const styles = StyleSheet.create({
     fontSize: 12, 
   },
 });
-
-const priceActionColor = Percentage => {
-  if(Percentage > 0) {
-    return '#76DE93';
-  }
-  if (Percentage < 0) {
-    return '#DE7676';
-  }
-  return '#FFFFFF';
-}
