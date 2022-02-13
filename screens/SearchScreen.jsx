@@ -7,43 +7,70 @@ import {
   Pressable, 
   Image, 
   FlatList } from 'react-native';
-import { useState, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { debounce } from 'lodash';
 import { useNavigation } from '@react-navigation/native';
 
-import FiltersColumn from '../containers/FiltersColumn';
 import ScreenViewWrapper from '../components/ScreenViewWrapper';
-import PairItem from '../components/PairItem';
+import Spinner from '../components/Spinner';
+
+import FiltersColumn from '../containers/FiltersColumn';
+import PairItem from '../containers/PairItem';
 
 import font from '../constants/styleFonts';
 
 import SearchIcon from '../assets/images/search.png';
 import CloseIcon from '../assets/images/close.png';
 
-const MockData = [
-  "bitcoin",
-  "ethereum",
-];
-
-
-export default function SearchScreen({ navigation }){
+export default function SearchScreen({ 
+  navigation,
+  itemIds, 
+  currency,
+  isFetching,
+  fetchSearch
+}){
   const [searchValue, setSearchValue] = useState('');
+  const [latestSearchValue, setLatestSearchValue] = useState('');
 
-  const renderItem = ({ item:id }) => {
+  const onSubmit = useCallback(() => {
+    if(searchValue){
+      setLatestSearchValue(searchValue);
+      fetchSearch({
+        query: searchValue, 
+        vs_currency: currency
+      })
+    }
+  }, [searchValue])
+
+  const renderItem = ({ item: dataKey }) => (
+    <Pressable 
+      onPress={() => {
+        navigation.popToTop();
+        setTimeout(() => {
+          navigation.navigate('PairDetail', { dataKey })
+        },500);
+      }}>
+      <PairItem dataKey={dataKey}/>
+    </Pressable>
+  );
+
+  const renderLoading = () => (
+    <View style={styles.loading}>
+      <Spinner />
+    </View>
+  );
+
+  const renderEmptyResult = () => {
+    if(!latestSearchValue) return null;
     return (
-      <Pressable 
-        onPress={() => {
-          navigation.popToTop();
-          setTimeout(() => {
-            navigation.navigate('PairDetail', { params: { id }})
-          },500);
-        }}>
-        <PairItem id={id}/>
-      </Pressable>
+      <View style={styles.emptyResult}>
+        <Text style={styles.emptyResultText}>No Results for "{latestSearchValue}"</Text>
+      </View>
     )
   };
 
   return (
-    <ScreenViewWrapper isModalScreen>
+    <ScreenViewWrapper>
       <View style={styles.header}>
         <View style={styles.searchInputWrapper}>
           <Image style={styles.searchIcon} source={SearchIcon} />
@@ -54,7 +81,8 @@ export default function SearchScreen({ navigation }){
             placeholderTextColor="#4E4E4E"
             clearButtonMode="while-editing"
             maxLength={30}
-            onSubmitEditing={()=>{}}
+            autoCorrect={false}
+            onSubmitEditing={onSubmit}
             onChangeText={value => setSearchValue(value)}
             value={searchValue}
           />
@@ -67,15 +95,16 @@ export default function SearchScreen({ navigation }){
         screen="search" 
         useCurrencySelector
       />
-      <FlatList 
-        style={styles.list}
-        data={MockData} 
-        renderItem={renderItem} 
-        keyExtractor={id => id} 
-        ListEmptyComponent={null}
-        onRefresh={()=>{}}
-        refreshing={false}
-      />
+      { isFetching
+        ? renderLoading()
+        : <FlatList 
+          style={styles.list}
+          data={itemIds} 
+          renderItem={renderItem} 
+          keyExtractor={id => id} 
+          ListEmptyComponent={renderEmptyResult()}
+        />
+      }
     </ScreenViewWrapper>
   )
 }
@@ -117,5 +146,18 @@ const styles = StyleSheet.create({
   },
   list: {
     marginTop: 12,
+  },
+  emptyResult: {
+    paddingTop: 52,
+    alignItems: 'center',
+  },
+  emptyResultText: {
+    fontSize: 14,
+    color: '#fff',
+    ...font.roboto.regular
+  },
+  loading: {
+    paddingTop: 52,
+    alignItems: 'center',
   }
 });

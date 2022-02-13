@@ -7,9 +7,7 @@ import {
 } from '../constants/actionTypes';
 
 
-const defaultState = fromJS({
-  market_finance: {},
-});
+const defaultState = fromJS({});
 
 export default (state = defaultState, action) => {
   switch (action.type) {

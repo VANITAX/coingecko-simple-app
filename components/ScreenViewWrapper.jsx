@@ -8,7 +8,8 @@ export default function ScreenViewWrapper({ children, isModalScreen, ...props })
   const childrenNodes = React.Children.map(children, children=>children);
   const insert = useSafeAreaInsets();
   const paddingTop = (!isModalScreen ? 20 : 0);
-  const screenViewHeight = height - insert.top - paddingTop;
+  const modalHeaderHeight = 80;
+  const screenViewHeight = height - insert.top - paddingTop - (isModalScreen && modalHeaderHeight);
     return (
       <SafeAreaView {...props}>
         <View style={

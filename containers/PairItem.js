@@ -1,11 +1,13 @@
 import { connect } from 'react-redux';
 import PairItem from '../components/PairItem';
 
-import fetchCoinMarketFinanceList from '../actions/fetchCoinMarketFinanceList';
+import fetchCoinMarketFinance from '../actions/fetchCoinMarketFinance';
 
 const mapStateToProps = (state, { dataKey }) => {
+  const vs_currency = dataKey?.split(':')?.[1];
+  const id = state.getIn(['finances', dataKey, 'id']);
   return {
-    id: state.getIn(['finances', dataKey, 'id']),
+    id, vs_currency,
     symbol: state.getIn(['finances', dataKey, 'symbol']),
     name: state.getIn(['finances', dataKey, 'name']),
     image: state.getIn(['finances', dataKey, 'image']),
@@ -14,10 +16,15 @@ const mapStateToProps = (state, { dataKey }) => {
     market_cap_rank: state.getIn(['finances', dataKey, 'market_cap_rank']),
     price_change_24h: state.getIn(['finances', dataKey, 'price_change_24h']),
     price_change_percentage_24h: state.getIn(['finances', dataKey, 'price_change_percentage_24h']),
+    isFetched: state.getIn(['networkings', 'coin', id, 'finance', 'detail', 'isFetched']),
   };
 }
 const mapDispatchToProps = dispatch => ({
-  fetchCoinData: ({}) => dispatch({}),
+  fetchCoinFinance: ({ coin_id, vs_currency }) => dispatch(fetchCoinMarketFinance({
+    coin_id,
+    vs_currency,
+    networkKeyPath: ['coin', coin_id, 'finance', 'detail']
+  })),
 })
 
 

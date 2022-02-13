@@ -22,7 +22,7 @@ import ShareIcon from '../assets/images/share.png';
 import SearchIcon from '../assets/images/search.png';
 
 const renderItem = ({ item: dataKey }) => (
-  <Link key={dataKey} to={{screen: 'PairDetail', params: { dataKey: dataKey }}} >
+  <Link key={dataKey} to={{screen: 'PairDetail', params: { dataKey }}} >
     <PairItem dataKey={dataKey}/>
   </Link>
 );
@@ -58,14 +58,13 @@ export default function PairsListScreen({
       page: nextPage,
     }),[currency, sorting, nextPage])
 
-  const renderPairItem = useMemo(()=>renderItem, [currency, sorting])
+  const renderPairItem = useMemo(()=>
+    renderItem, [currency, sorting]);
 
   useEffect(() => 
     fetchData(),
     [currency, sorting]
   );
-  
-
 
   return (
     <ScreenViewWrapper>
@@ -93,25 +92,23 @@ export default function PairsListScreen({
         useSortSelector 
         useCurrencySelector
       />
-      { !!pairItemIds.length
-        ? <FlatList
-            style={styles.list}
-            data={pairItemIds} 
-            renderItem={renderPairItem} 
-            initialNumToRender={15}
-            keyExtractor={item => item} 
-            refreshControl={
-            <RefreshControl
-              tintColor="#fff"
-              refreshing={isFetching}
-              onRefresh={fetchData}
-            />
-          }
-            onEndReached={fetchNext}
-            onEndReachedThreshold={1}
-            ListFooterComponent={renderLoading()}
-          />
-        : null}
+       <FlatList
+        style={styles.list}
+        data={pairItemIds} 
+        renderItem={renderPairItem} 
+        initialNumToRender={15}
+        keyExtractor={item => item} 
+        refreshControl={
+        <RefreshControl
+          tintColor="#fff"
+          refreshing={isFetching}
+          onRefresh={fetchData}
+        />
+      }
+        onEndReached={fetchNext}
+        onEndReachedThreshold={1}
+        ListFooterComponent={ !pairItemIds.length ? null : renderLoading() }
+      />
     </ScreenViewWrapper>
   );
 }

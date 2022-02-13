@@ -42,7 +42,7 @@ export default function PairDetailScreen({
   fetchCoinDetail, fetchCoinFinance, fetchCoinFinanceGraph,
   isDetailsFetching, isFinanceFetching, isFinanceGraphFetching
 }) {
-
+  console.log(dataKey);
   useEffect(()=> {
     fetchCoinDetail({ coin_id: id });
     fetchCoinFinanceGraph({coin_id: id , vs_currency})
@@ -53,11 +53,11 @@ export default function PairDetailScreen({
     fetchCoinFinance({coin_id: id , vs_currency});
     fetchCoinFinanceGraph({coin_id: id , vs_currency});
   }
-
+  console.log(symbol);
   const pricePointData = useMemo(()=>
     chartDataWithoutTimestamp(chartData), 
     [chartData]);
-  const pairName = `${symbol}/${vs_currency}`.toUpperCase();
+  const pairName = `${symbol}/${vs_currency}`?.toUpperCase();
   const uppercaseSymbol = symbol.toUpperCase();
   const lastUpdated = last_updated.split('T')[0];
   const isAllDataFetching = isFinanceFetching && isDetailsFetching && isFinanceGraphFetching;

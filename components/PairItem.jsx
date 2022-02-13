@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View, Pressable, Image } from 'react-native';
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import font from '../constants/styleFonts';
@@ -6,57 +7,68 @@ import font from '../constants/styleFonts';
 import FormatNumberText from './FormatNumberText';
 
 export default function PairItem({ 
-  id,
-  dataKey,
-  symbol, name, image, 
-  current_price, 
-  market_cap, 
-  market_cap_rank, 
-  price_change_percentage_24h: change_percentage
-}) {
+    id,
+    dataKey,
+    symbol, name, image, 
+    current_price, 
+    market_cap, 
+    market_cap_rank, 
+    vs_currency,
+    price_change_percentage_24h,
+    fetchCoinFinance, isFetched
+  }) {
   if(!id) return null;
+  
+  const uppercasedSymbol = symbol?.toUpperCase();
+  const hasFinanceData = !!current_price;
+  
+  useEffect(() => {
+    if(!hasFinanceData) {
+      fetchCoinFinance({ coin_id: id, vs_currency })
+    }
+  }, [])
+
+  if(isFetched && !hasFinanceData) return null;
 
   return (
     <View style={styles.container}>
       <View style={styles.group}>
-        <Image 
-          style={styles.icon} 
-          source={{
-            url:image
-          }}
-        />
+        <Image style={styles.icon} source={{ url: image }}/>
         <View>
-          <Text style={styles.primary}>{symbol?.toUpperCase()}</Text>
+          <Text style={styles.primary}>{uppercasedSymbol}</Text>
           <Text style={styles.secondary}>{name}</Text>
         </View>
       </View>
-      <View style={styles.group}>
-        <View style={styles.marketInfo}>
-          <View style={styles.priceAction}>
+      
+      { hasFinanceData ?
+        <View style={styles.group}>
+          <View style={styles.marketInfo}>
+            <View style={styles.priceAction}>
+              <FormatNumberText 
+                style={styles.primary} 
+                prefix="$" 
+                fixed={5}
+                format="commas" 
+                value={current_price}
+              />
+              <FormatNumberText 
+                useColor
+                usePnMarker
+                style={styles.changePercentage}
+                fixed={2}
+                value={price_change_percentage_24h}
+                suffix="%"
+              />
+            </View>
             <FormatNumberText 
-              style={styles.primary} 
+              style={styles.secondary} 
               prefix="$" 
-              fixed={5}
               format="commas" 
-              value={current_price}
-            />
-            <FormatNumberText 
-              useColor
-              usePnMarker
-              style={styles.changePercentage}
-              fixed={2}
-              value={change_percentage}
-              suffix="%"
+              value={market_cap}
             />
           </View>
-          <FormatNumberText 
-            style={styles.secondary} 
-            prefix="$" 
-            format="commas" 
-            value={market_cap}
-          />
         </View>
-      </View>
+      : null }
     </View>
   )
 }
@@ -90,6 +102,7 @@ const styles = StyleSheet.create({
   group: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   icon: {
     width: 26, 

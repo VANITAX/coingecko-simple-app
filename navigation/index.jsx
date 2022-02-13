@@ -12,7 +12,7 @@ import configureStore from '../reducers/configureStore';
 
 import PairsListScreen from '../containers/PairListScreen';
 import PairDetailScreen from '../containers/PairDetaileScreen';
-import SearchScreen from '../screens/SearchScreen';
+import SearchScreen from '../containers/SearchScreen';
 import AboutScreen from '../screens/AboutScreen';
 
 const store = configureStore();
@@ -38,11 +38,11 @@ function RootNavigator() {
     <RootStack.Navigator>
       <RootStack.Screen name="Root" component={PairsListScreen} options={{ headerShown: false }} />
       <RootStack.Screen name="PairDetail" component={PairDetailScreen} options={{ headerShown: false }} />
+      <RootStack.Screen name="Search" component={SearchScreen} options={{ headerShown: false }} />
       {/* <RootStack.Screen name="CurrencySelect" component={TabOneScreen} options={{ headerShown: false }} /> */}
       {/* <RootStack.Screen name="SortSelect" component={TabOneScreen} options={{ headerShown: false }} /> */}
       <RootStack.Group screenOptions={{ presentation: 'modal' }}>
         <RootStack.Screen name="AboutTarget" component={AboutScreen} options={{ headerShown: false }} />
-        <RootStack.Screen name="Search" component={SearchScreen} options={{ headerShown: false }} />
       </RootStack.Group>
     </RootStack.Navigator>
   );
