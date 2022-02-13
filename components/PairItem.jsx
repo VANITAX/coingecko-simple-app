@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, Pressable, Image } from 'react-native';
 import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
+import useCurrencySymbol from '../hooks/useCurrencySymbol';
 import font from '../constants/styleFonts';
 
 import FormatNumberText from './FormatNumberText';
@@ -21,7 +22,7 @@ export default function PairItem({
   
   const uppercasedSymbol = symbol?.toUpperCase();
   const hasFinanceData = !!current_price;
-  
+  const currencySymbol = useCurrencySymbol(vs_currency);
   useEffect(() => {
     if(!hasFinanceData) {
       fetchCoinFinance({ coin_id: id, vs_currency })
@@ -46,7 +47,7 @@ export default function PairItem({
             <View style={styles.priceAction}>
               <FormatNumberText 
                 style={styles.primary} 
-                prefix="$" 
+                prefix={currencySymbol} 
                 fixed={5}
                 format="commas" 
                 value={current_price}
@@ -62,7 +63,7 @@ export default function PairItem({
             </View>
             <FormatNumberText 
               style={styles.secondary} 
-              prefix="$" 
+              prefix={currencySymbol} 
               format="commas" 
               value={market_cap}
             />

@@ -10,6 +10,8 @@ import {
   FlatList } from 'react-native';
 import { useEffect, useMemo } from 'react';
 
+import useCurrencySymbol from '../hooks/useCurrencySymbol';
+
 import ScreenViewWrapper from '../components/ScreenViewWrapper';
 import FormatNumberText from '../components/FormatNumberText';
 import TrendLineChart from '../components/TrendLineChart';
@@ -55,6 +57,9 @@ export default function PairDetailScreen({
   const pricePointData = useMemo(()=>
     chartDataWithoutTimestamp(chartData), 
     [chartData]);
+
+  const currencySymbol = useCurrencySymbol(vs_currency);
+
   const pairName = `${symbol}/${vs_currency}`?.toUpperCase();
   const uppercaseSymbol = symbol.toUpperCase();
   const lastUpdated = last_updated.split('T')[0];
@@ -91,7 +96,7 @@ export default function PairDetailScreen({
             <View style={styles.priceRow}>
               <FormatNumberText
                 style={styles.currentPrice}
-                prefix="$" 
+                prefix={currencySymbol} 
                 format="commas" 
                 value={current_price}
               />
@@ -107,7 +112,8 @@ export default function PairDetailScreen({
           </View>
           <View style={styles.graphContainer}>
           <TrendLineChart 
-            style={styles.graphContainer} 
+            style={styles.graphContainer}
+            currency={vs_currency}
             isFetching={isFinanceGraphFetching} 
             data={pricePointData}/>
           </View>
@@ -126,11 +132,11 @@ export default function PairDetailScreen({
               <View style={styles.statsDetailcolumn}>
                 {statsInfoItem({
                   label: 'Market Cap', 
-                  value: (<FormatNumberText prefix="$" format="metric" fixed={2} value={market_cap}/>)
+                  value: (<FormatNumberText prefix={currencySymbol} format="metric" fixed={2} value={market_cap}/>)
                 })}
                 {statsInfoItem({
                   label: 'Total Volume', 
-                  value: (<FormatNumberText prefix="$" format="metric" fixed={2} value={total_volume}/>)
+                  value: (<FormatNumberText prefix={currencySymbol} format="metric" fixed={2} value={total_volume}/>)
                 })}
                 {statsInfoItem({
                   label: 'Max Supply', 
@@ -138,11 +144,11 @@ export default function PairDetailScreen({
                 })}
                  {statsInfoItem({
                   label: '24h High', 
-                  value: (<FormatNumberText prefix="$" format="commas" value={high_24h}/>)
+                  value: (<FormatNumberText prefix={currencySymbol} format="commas" value={high_24h}/>)
                 })}
                 {statsInfoItem({
                   label: 'All Time High', 
-                  value: (<FormatNumberText prefix="$" format="commas" value={all_time_high}/>)
+                  value: (<FormatNumberText prefix={currencySymbol} format="commas" value={all_time_high}/>)
                 })}
                 {statsInfoItem({label: 'Rank', value: `#${market_cap_rank}`})}
               </View>
@@ -150,23 +156,23 @@ export default function PairDetailScreen({
               <View style={styles.statsDetailcolumn}>
                 {statsInfoItem({
                   label: 'Fully Diluted Valuation', 
-                  value: (<FormatNumberText prefix="$" format="metric" fixed={2} value={fully_diluted_valuation}/>)
+                  value: (<FormatNumberText prefix={currencySymbol} format="metric" fixed={2} value={fully_diluted_valuation}/>)
                 })}
                 {statsInfoItem({
                   label: 'Circulating Supply', 
-                  value: (<FormatNumberText prefix="$" format="metric" fixed={2} value={circulating_supply}/>)
+                  value: (<FormatNumberText prefix={currencySymbol} format="metric" fixed={2} value={circulating_supply}/>)
                 })}
                 {statsInfoItem({
                   label: 'Total Supply', 
-                  value: (<FormatNumberText prefix="$" format="metric" fixed={2} value={total_supply}/>)
+                  value: (<FormatNumberText prefix={currencySymbol} format="metric" fixed={2} value={total_supply}/>)
                 })}
                 {statsInfoItem({
                   label: '24h Low', 
-                  value: (<FormatNumberText prefix="$" format="commas" value={low_24h}/>)
+                  value: (<FormatNumberText prefix={currencySymbol} format="commas" value={low_24h}/>)
                 })}
                 {statsInfoItem({
                   label: 'All Time Low', 
-                  value: (<FormatNumberText prefix="$" format="commas" value={all_time_low}/>)
+                  value: (<FormatNumberText prefix={currencySymbol} format="commas" value={all_time_low}/>)
                 })}
                 {statsInfoItem({label: 'Last Updated', value: lastUpdated})}
               </View>

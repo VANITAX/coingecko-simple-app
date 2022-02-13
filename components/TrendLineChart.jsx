@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import { LineChart } from 'react-native-chart-kit';
 import { useWindowDimensions, View, Text, StyleSheet } from 'react-native';
+import useCurrencySymbol from '../hooks/useCurrencySymbol';
 import FormatNumberText from '../components/FormatNumberText';
 import Spinner from '../components/Spinner';
 import font from '../constants/styleFonts';
@@ -29,16 +30,17 @@ const renderLoading = () => (
 )
 
 // temporary not supported for date range selection.
-export default function TrendLineChart({ data, style, isFetching }) {
+export default function TrendLineChart({ data, style, currency, isFetching }) {
   const { width } = useWindowDimensions();
   const color = useCallback(() => CHART_LINE_COLOR, []);
+  const currencySymbol = useCurrencySymbol(currency);
   const { high, low } = useMemo(()=> getDataHL(data),[data]);
   const chartWidth = width + 70; // adding hardcode "70px" to fix chart library will not to auto filling width bug.
   return (
     <View style={styles.container}>
       <FormatNumberText
         style={[styles.hlPriceLabel, styles.highPrice]}
-        prefix="$" 
+        prefix={currencySymbol} 
         fixed={3}
         format="commas" 
         value={high}
@@ -66,7 +68,7 @@ export default function TrendLineChart({ data, style, isFetching }) {
       <View style={styles.chartFooter}>
         <FormatNumberText
           style={[styles.hlPriceLabel, styles.lowPrice]}
-          prefix="$" 
+          prefix={currencySymbol} 
           fixed={3}
           format="commas" 
           value={low}
