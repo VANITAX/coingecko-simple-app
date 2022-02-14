@@ -21,7 +21,7 @@ const mapDispatchToProps = dispatch => ({
     networkKeyPath: NETWORK_KEY_PATH,
   })),
   clearSearchResults: () => 
-    dispatch(clearPairsList({ screen: 'search' }))
+    dispatch(clearPairsList({ select: 'search' }))
 })
 
 
