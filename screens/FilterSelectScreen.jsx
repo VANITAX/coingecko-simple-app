@@ -33,8 +33,9 @@ export default function FilterSelectScreen ({
     const symbol = option.symbol || '';
     return (
       <Pressable 
+        key={option.id}
         style={styles.option(isLast)}
-        onPress={() => selectOptions({screen, filter: filterKind, value: option.id})}
+        onPress={() => !isSelected && selectOptions({screen, filter: filterKind, value: option.id})}
       >
         <Text style={styles.optionText}>{option.desc}</Text>
         {isSelected ? <Image style={styles.optionIcon} source={CheckIcon}/> : null}

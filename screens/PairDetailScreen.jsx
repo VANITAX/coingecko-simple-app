@@ -15,7 +15,7 @@ import useCurrencySymbol from '../hooks/useCurrencySymbol';
 import ScreenViewWrapper from '../components/ScreenViewWrapper';
 import FormatNumberText from '../components/FormatNumberText';
 import TrendLineChart from '../components/TrendLineChart';
-
+import ShareToTwitterButton from '../components/ShareToTwitterButton';
 import RightArrowIcon from '../assets/images/right-arrow.png';
 import ShareIcon from '../assets/images/share.png';
 
@@ -54,6 +54,7 @@ export default function PairDetailScreen({
     fetchCoinFinance({coin_id: id , vs_currency});
     fetchCoinFinanceGraph({coin_id: id , vs_currency});
   }
+
   const pricePointData = useMemo(()=>
     chartDataWithoutTimestamp(chartData), 
     [chartData]);
@@ -71,9 +72,6 @@ export default function PairDetailScreen({
           <Image style={styles.headerIcon} source={RightArrowIcon} />
         </Pressable>
         <Text style={styles.headerTitle}>{uppercaseSymbol}</Text>
-        <Pressable>
-          <Image style={styles.headerIcon} source={ShareIcon} />
-        </Pressable>
       </View>
       <View style={styles.titleContainer}>
         <Image style={styles.logo} source={{url: image}} />

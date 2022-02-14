@@ -5,27 +5,27 @@ export const sortOptions = [
   },
   // {
   //   id: 'id_asc',
-  //   desc: 'Name ↑'
+  //   desc: 'Name ↓'
   // },
   {
     id: 'id_desc',
-    desc: 'Name ↓'
+    desc: 'Name ↑'
   },
   {
     id: 'market_cap_asc',
-    desc: 'Market Cap ↑'
-  },
-  {
-    id: 'market_cap_desc',
     desc: 'Market Cap ↓'
   },
   {
+    id: 'market_cap_desc',
+    desc: 'Market Cap '
+  },
+  {
     id: 'volume_asc',
-    desc: 'Volume ↑'
+    desc: 'Volume ↓'
   },
   {
     id: 'volume_desc',
-    desc: 'Volume ↓'
+    desc: 'Volume ↑'
   },
 ];
 

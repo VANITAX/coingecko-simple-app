@@ -14,6 +14,7 @@ import FiltersColumn from '../containers/FiltersColumn';
 import PairItem from '../containers/PairItem';
 
 import ScreenViewWrapper from '../components/ScreenViewWrapper';
+import ShareToTwitterButton from '../components/ShareToTwitterButton';
 import Spinner from '../components/Spinner';
 
 import font from '../constants/styleFonts';
@@ -58,8 +59,7 @@ export default function PairsListScreen({
       page: nextPage,
     }),[currency, sorting, nextPage])
 
-  const renderPairItem = useMemo(()=>
-    renderItem, [currency, sorting]);
+  const renderPairItem = useMemo(()=>renderItem, []);
 
   useEffect(() => 
     fetchData(),
@@ -77,14 +77,7 @@ export default function PairsListScreen({
           >
             <Image style={styles.toolIcon} source={SearchIcon} />
           </Pressable>
-          <Pressable 
-            style={styles.toolButton}
-            onPress={()=>{
-              Linking.openURL('https://twitter.com/intent/tweet?text=123456789012345678901234567890%0A123456789012345678901234567890%0A123456789012345678901234567890')
-            }} 
-          >
-          <Image style={styles.toolIcon} source={ShareIcon} />
-        </Pressable>
+          <ShareToTwitterButton ids={pairItemIds}/>
         </View>
       </View>
       <FiltersColumn 
@@ -130,7 +123,7 @@ const styles = StyleSheet.create({
     height: 22,
   },
   toolButton: {
-    marginLeft: 16
+    marginRight: 16
   },
   headerTitle: {
     color: '#fff', 

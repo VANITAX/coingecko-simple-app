@@ -13,7 +13,7 @@ const RANGES = [
   { divider: 1e3, suffix: 'K' },
 ];
 
-const NumberWithMetric = (num, fixed) => {
+export const NumberWithMetric = (num, fixed) => {
   for (let i = 0; i < RANGES.length; i++) {
     if (num >= RANGES[i].divider) {
       return (num / RANGES[i].divider).toFixed(fixed).toString() + RANGES[i].suffix;
@@ -24,7 +24,7 @@ const NumberWithMetric = (num, fixed) => {
 };
 
 // Ref. https://stackoverflow.com/a/2901298
-const numberWithCommas = num => {
+export const numberWithCommas = num => {
   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
 
