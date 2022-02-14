@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import PairsListScreen from '../screens/PairsListScreen';
 
 import fetchCoinMarketFinanceList from '../actions/fetchCoinMarketFinanceList';
+import clearPairsList from '../actions/clearPairsList';
 
 const NETWORK_KEY_PATH = ['list', 'market_finance'];
 
@@ -26,6 +27,7 @@ const mapDispatchToProps = dispatch => ({
     page,
     networkKeyPath: NETWORK_KEY_PATH,
   })),
+  clearPairsList: () => dispatch(clearPairsList({ screen: 'list' }))
 })
 
 

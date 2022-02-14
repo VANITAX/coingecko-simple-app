@@ -74,7 +74,7 @@ export default function PairDetailScreen({
         <Text style={styles.headerTitle}>{uppercaseSymbol}</Text>
       </View>
       <View style={styles.titleContainer}>
-        <Image style={styles.logo} source={{url: image}} />
+        <Image style={styles.logo} source={{uri: image}} />
         <View>
           <Text style={styles.title}>{name}</Text>
           <Text style={styles.subtitle}>{pairName}</Text>

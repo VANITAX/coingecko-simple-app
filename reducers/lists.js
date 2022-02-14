@@ -2,7 +2,6 @@ import { fromJS } from 'immutable';
 
 import {
   ADD_LIST_ITEMS,
-  REMOVE_LIST_ITEMS,
   SET_LIST_ITEMS,
 } from '../constants/actionTypes';
 
@@ -15,8 +14,6 @@ export default (state = defaultState, action) => {
       return _SET_LIST_ITEMS(action.payload)(state);
     case ADD_LIST_ITEMS:
       return _ADD_LIST_ITEMS(action.payload)(state);
-    case REMOVE_LIST_ITEMS:
-      return _REMOVE_LIST_ITEMS(action.payload)(state);
     default:
       return state;
   }
@@ -30,18 +27,16 @@ export default (state = defaultState, action) => {
  * @param {string} {select} - list select 
  * @param {array} [{itemIds}=[]] - list item ids
  * @param {number} [{nextPage}] - list next page
- * @param {number} [{lastPage}] - list last page
  * @return {Immutable.Map} New state
  */
 const _ADD_LIST_ITEMS = ({
   select = `unknown-${Math.random()}`,
   itemIds = [],
-  nextPage,
-  lastPage,
+  nextPage
 }) => state => {
   const currentIds = state.getIn([select, 'itemIds']) || fromJS([]);
   return state
-    .mergeIn([select], { nextPage, lastPage })
+    .mergeIn([select], { nextPage })
     .setIn(
       [select, 'itemIds'],
       currentIds.concat(itemIds.filter(itemId => !currentIds.includes(itemId)))
@@ -55,43 +50,15 @@ const _ADD_LIST_ITEMS = ({
  * @param {string} {select} - list select
  * @param {array} [{itemIds}=[]] - list item ids
  * @param {number} [{nextPage}] - list next page
- * @param {number} [{lastPage}] - list last page
  * @return {Immutable.Map} New state
  */
 const _SET_LIST_ITEMS = ({
   select = `unknown-${Math.random()}`,
   itemIds = [],
   nextPage,
-  lastPage,
 }) => state => {
   const ids = fromJS(itemIds);
   return state
-    .mergeIn([ select ], { nextPage, lastPage })
+    .mergeIn([ select ], { nextPage })
     .setIn([select, 'itemIds'], ids);
-};
-
-/**
- * Remove list item
- * @kind reducer/actionType
- * @name REMOVE_LIST_ITEMS
- * @param {string} {select} - list select
- * @param {array} {itemIds} - list item ids
- * @param {number} [{nextPage}] - list next page
- * @param {number} [{lastPage}] - list last page
- * @return {Immutable.Map} New state
- */
-const _REMOVE_LIST_ITEMS = ({
-  select = `unknown-${Math.random()}`,
-  itemIds = [],
-  totalCount,
-  nextPage,
-  lastPage,
-}) => state => {
-  const currentIds = state.getIn([select, 'itemIds']) || fromJS([]);
-  return state
-    .merge(select, { nextPage, lastPage })
-    .setIn(
-      [select, 'itemIds'],
-      currentIds.filter(id => itemIds.every(itemId => id !== itemId))
-    );
 };

@@ -27,10 +27,15 @@ export default function SearchScreen({
   itemIds, 
   currency,
   isFetching,
-  fetchSearch
+  fetchSearch,
+  clearSearchResults,
 }){
   const [searchValue, setSearchValue] = useState('');
   const [latestSearchValue, setLatestSearchValue] = useState('');
+
+  useEffect(()=>{
+    return () => clearSearchResults();
+  },[]);
 
   const onSubmit = useCallback(() => {
     if(searchValue){
@@ -91,10 +96,6 @@ export default function SearchScreen({
           <Image style={styles.headerIcon} source={CloseIcon} />
         </Pressable>
       </View>
-      <FiltersColumn 
-        screen="search" 
-        useCurrencySelector
-      />
       { isFetching
         ? renderLoading()
         : <FlatList 

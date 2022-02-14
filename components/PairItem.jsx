@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Pressable, Image } from 'react-native';
+import { Dimensions, StyleSheet, Text, View, Pressable, Image } from 'react-native';
 import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
@@ -7,6 +7,9 @@ import font from '../constants/styleFonts';
 
 import FormatNumberText from './FormatNumberText';
 
+const windowWidth = Dimensions.get('window').width;
+const TOTAL_PADDING_HORIZONTAL = 40;
+const itemWidth = (windowWidth - TOTAL_PADDING_HORIZONTAL);
 export default function PairItem({ 
     id,
     dataKey,
@@ -23,6 +26,7 @@ export default function PairItem({
   const uppercasedSymbol = symbol?.toUpperCase();
   const hasFinanceData = !!current_price;
   const currencySymbol = useCurrencySymbol(vs_currency);
+
   useEffect(() => {
     if(!hasFinanceData) {
       fetchCoinFinance({ coin_id: id, vs_currency })
@@ -30,11 +34,10 @@ export default function PairItem({
   }, [])
 
   if(isFetched && !hasFinanceData) return null;
-
   return (
     <View style={styles.container}>
       <View style={styles.group}>
-        <Image style={styles.icon} source={{ url: image }}/>
+        <Image style={styles.icon} source={{ uri: image }}/>
         <View>
           <Text style={styles.primary}>{uppercasedSymbol}</Text>
           <Text style={styles.secondary}>{name}</Text>
@@ -96,8 +99,9 @@ PairItem.defaultProps = {
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
+    width: itemWidth,
     flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'space-between',
   },
   group: {
