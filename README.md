@@ -16,11 +16,13 @@
 
 2. Into project folder
 
-3. Run `yarn install` or `yarn`
+3. Run `$ cp config/default.config.json config/config.json`
 
-4. When modules installed then run `yarn start`
+4. Run `$ yarn install` or `yarn`
 
-5. Following terminal expo-cli develope steps 
+5. When modules installed then run `yarn start`
+
+6. Following terminal expo-cli develope steps 
 
 
 ## Android emulator install
