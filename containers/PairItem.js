@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
-import PairItem from '../components/PairItem';
-
 import fetchCoinMarketFinance from '../actions/fetchCoinMarketFinance';
+import PairItem from '../components/PairItem';
 
 const mapStateToProps = (state, { dataKey }) => {
   const vs_currency = dataKey?.split(':')?.[1];
@@ -19,6 +18,7 @@ const mapStateToProps = (state, { dataKey }) => {
     isFetched: state.getIn(['networkings', 'coin', id, 'finance', 'detail', 'isFetched']),
   };
 }
+
 const mapDispatchToProps = dispatch => ({
   fetchCoinFinance: ({ coin_id, vs_currency }) => dispatch(fetchCoinMarketFinance({
     coin_id,

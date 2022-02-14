@@ -6,20 +6,18 @@ import {
   Image, 
   Linking,
   FlatList } from 'react-native';
-import { useMemo } from 'react';
 import { useNavigation } from '@react-navigation/native';
-
+import PropTypes from 'prop-types';
+import { useMemo } from 'react';
 import { 
   sortOptions,  
   currenciesOptions 
 } from '../constants/filterOptions';
-import font from '../constants/styleFonts';
-
 import OptionsIcon from '../assets/images/options.png';
 import ExchangeIcon from '../assets/images/exchange.png';
+import font from '../constants/styleFonts';
 
-
-const getSortOptionsDesc = (sortId) => {
+const getSortOptionsDesc = sortId => {
   return sortOptions.filter(({id})=>sortId === id)[0]?.desc || ''
 };
 
@@ -58,6 +56,16 @@ export default function FilterColumn({
       : null}
     </View>
   )
+}
+
+FilterColumn.propTypes = {
+  sorting: PropTypes.string, 
+  currency: PropTypes.string,
+};
+
+FilterColumn.defaultProps = {
+  sorting: '', 
+  currency: '',
 }
 
 const styles = StyleSheet.create({

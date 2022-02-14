@@ -1,17 +1,19 @@
 
-import { StyleSheet, Text, View, Pressable, Image } from 'react-native';
+import { 
+  StyleSheet, 
+  Text, 
+  View, 
+  Pressable, 
+  Image } from 'react-native';
+import PropTypes from 'prop-types';
 import ScreenViewWrapper from '../components/ScreenViewWrapper';
-
 import { 
   sortOptions,  
   currenciesOptions 
 } from '../constants/filterOptions';
-
 import CloseIcon from '../assets/images/close.png';
 import CheckIcon from '../assets/images/check.png';
-
 import font from '../constants/styleFonts';
-
 
 export default function FilterSelectScreen ({
   navigation,
@@ -56,6 +58,20 @@ export default function FilterSelectScreen ({
       </View>
     </ScreenViewWrapper>
   );
+}
+
+FilterSelectScreen.propTypes = {
+  filterKind: PropTypes.string,
+  screen: PropTypes.string,
+  current_selected: PropTypes.string,
+  selectOptions: PropTypes.func
+}
+
+FilterSelectScreen.defaultProps = {
+  filterKind: '', 
+  screen: '',
+  current_selected: '',
+  selectOptions: () => null,
 }
 
 const styles = StyleSheet.create({

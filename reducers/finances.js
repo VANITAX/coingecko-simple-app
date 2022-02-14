@@ -31,7 +31,7 @@ export default (state = defaultState, action) => {
 const _SET_FINANCE_DATA = ({ keyPath, financeData }) => state => state.mergeIn(keyPath, financeData);
 
 /**
- * Add finance Data
+ * Add Finance Data
  * @kind reducer/actionType
  * @name ADD_FINANCE_DATA
  * @param {string} finance.dataKey - finance dataKey

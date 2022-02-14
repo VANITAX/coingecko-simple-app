@@ -1,6 +1,7 @@
+import { useWindowDimensions, View, Text, StyleSheet } from 'react-native';
 import { useCallback, useMemo } from 'react';
 import { LineChart } from 'react-native-chart-kit';
-import { useWindowDimensions, View, Text, StyleSheet } from 'react-native';
+import PropTypes from 'prop-types';
 import useCurrencySymbol from '../hooks/useCurrencySymbol';
 import FormatNumberText from '../components/FormatNumberText';
 import Spinner from '../components/Spinner';
@@ -77,7 +78,19 @@ export default function TrendLineChart({ data, style, currency, isFetching }) {
       </View>
     </View>
   );
-}
+};
+
+TrendLineChart.propTypes = {
+  data: PropTypes.array, 
+  currency: PropTypes.string, 
+  isFetching: PropTypes.bool,
+};
+
+TrendLineChart.defaultProps = {
+  data: [],
+  currency: '',
+  isFetching: false,
+};
 
 const styles = StyleSheet.create({
   container: {

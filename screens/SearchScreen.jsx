@@ -8,17 +8,14 @@ import {
   Image, 
   FlatList } from 'react-native';
 import { useState, useEffect, useCallback } from 'react';
-import { debounce } from 'lodash';
 import { useNavigation } from '@react-navigation/native';
-
-import ScreenViewWrapper from '../components/ScreenViewWrapper';
-import Spinner from '../components/Spinner';
-
+import PropTypes from 'prop-types';
+import { debounce } from 'lodash';
 import FiltersColumn from '../containers/FiltersColumn';
 import PairItem from '../containers/PairItem';
-
+import ScreenViewWrapper from '../components/ScreenViewWrapper';
+import Spinner from '../components/Spinner';
 import font from '../constants/styleFonts';
-
 import SearchIcon from '../assets/images/search.png';
 import CloseIcon from '../assets/images/close.png';
 
@@ -33,10 +30,6 @@ export default function SearchScreen({
   const [searchValue, setSearchValue] = useState('');
   const [latestSearchValue, setLatestSearchValue] = useState('');
 
-  useEffect(()=>{
-    return () => clearSearchResults();
-  },[]);
-
   const onSubmit = useCallback(() => {
     if(searchValue){
       setLatestSearchValue(searchValue);
@@ -45,7 +38,11 @@ export default function SearchScreen({
         vs_currency: currency
       })
     }
-  }, [searchValue])
+  }, [searchValue]);
+
+  useEffect(()=>{
+    return () => clearSearchResults();
+  },[]);
 
   const renderItem = ({ item: dataKey }) => (
     <Pressable 
@@ -110,6 +107,21 @@ export default function SearchScreen({
   )
 }
 
+SearchScreen.propTypes = {
+  itemIds: PropTypes.array,
+  currency: PropTypes.string, 
+  isFetching: PropTypes.bool,
+  fetchSearch: PropTypes.func,
+  clearSearchResults: PropTypes.func,
+}
+
+SearchScreen.defaultProps = {
+  itemIds: [],
+  currency: '',
+  isfetching: false,
+  fetchSearch: () => null,
+  clearSearchResults: () => null
+}
 
 const styles = StyleSheet.create({
   header: {

@@ -7,17 +7,14 @@ import {
 } from 'react-native';
 import { useCallback, useMemo } from 'react';
 import { useStore } from 'react-redux';
-
-import { sortOptions } from '../constants/filterOptions';
-
+import PropTypes from 'prop-types';
 import ShareIcon from '../assets/images/share.png';
-
-
+import { sortOptions } from '../constants/filterOptions';
 
 const HASH_TAGS = ['Crypto', 'Bitcoin', 'BTC', 'Blockchain'];
 const TWITTER_BASE_URL = 'https://twitter.com';
 
-const getSortOptionsDesc = (sortId) => {
+const getSortOptionsDesc = sortId => {
   return sortOptions.filter(({id})=>sortId === id)[0]?.desc || ''
 };
 
@@ -32,7 +29,7 @@ const extractText = ({dataKey, state, index}) => {
 #${index+1} ${name}/${symbol?.toUpperCase()}  ${current_price}${vs_currency?.toUpperCase()} ${plMark}${Math.abs(price_change_percentage_24h)}%`;
 }
 
-export default function ShareToTwitterButton ({ shareType='top', count = 10, ids=[] }){
+export default function ShareToTwitterButton ({ count = 10, ids=[] }){
   const store = useStore();
   const reduxState = store.getState();
   const sortby = reduxState.getIn(['filters', 'list', 'sort_by']);
@@ -64,6 +61,16 @@ export default function ShareToTwitterButton ({ shareType='top', count = 10, ids
     </Pressable>
   );
 }
+
+ShareToTwitterButton.propTypes = {
+  count: PropTypes.number, 
+  ids: PropTypes.array,
+};
+
+ShareToTwitterButton.defaultProps = {
+  count: 0,
+  ids: [],
+};
 
 const styles = StyleSheet.create({
   headerIcon: {

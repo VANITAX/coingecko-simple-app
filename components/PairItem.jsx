@@ -1,15 +1,20 @@
-import { Dimensions, StyleSheet, Text, View, Pressable, Image } from 'react-native';
+import { 
+  Dimensions, 
+  StyleSheet, 
+  Text, 
+  View, 
+  Pressable, 
+  Image } from 'react-native';
 import { useEffect } from 'react';
 import PropTypes from 'prop-types';
-
 import useCurrencySymbol from '../hooks/useCurrencySymbol';
-import font from '../constants/styleFonts';
-
 import FormatNumberText from './FormatNumberText';
+import font from '../constants/styleFonts';
 
 const windowWidth = Dimensions.get('window').width;
 const TOTAL_PADDING_HORIZONTAL = 40;
 const itemWidth = (windowWidth - TOTAL_PADDING_HORIZONTAL);
+
 export default function PairItem({ 
     id,
     dataKey,
@@ -85,16 +90,25 @@ PairItem.propTypes = {
   image: PropTypes.string, 
   current_price: PropTypes.number, 
   market_cap: PropTypes.number,
+  market_cap_rank: PropTypes.number,
+  price_change_24h: PropTypes.number,
   price_change_percentage_24h: PropTypes.number,
+  isFetched: PropTypes.bool,
+  fetchCoinFinance: PropTypes.func,
 };
 
 PairItem.defaultProps = {
+  id: '',
   symbol: '',
   name: '', 
   image: '', 
   current_price: 0, 
   market_cap: 0,
+  market_cap_rank: 0,
+  price_change_24h: 0,
   price_change_percentage_24h: 0,
+  isFetched: false,
+  fetchCoinFinance: () => null,
 };
 
 const styles = StyleSheet.create({

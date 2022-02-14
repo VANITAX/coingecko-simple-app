@@ -1,10 +1,15 @@
-import { useWindowDimensions, StyleSheet, Text, View, Pressable, Image, ScrollView } from 'react-native';
+import { 
+  useWindowDimensions, 
+  StyleSheet, 
+  Text, 
+  View, 
+  Pressable, 
+  Image, 
+  ScrollView } from 'react-native';
 import RenderHtml from 'react-native-render-html';
-
+import PropTypes from 'prop-types';
 import ScreenViewWrapper from '../components/ScreenViewWrapper';
-
 import CloseIcon from '../assets/images/close.png';
-
 import font from '../constants/styleFonts';
 
 export default function AboutScreen({ navigation, symbol, description }) {
@@ -28,6 +33,16 @@ export default function AboutScreen({ navigation, symbol, description }) {
       </ScrollView>
     </ScreenViewWrapper>
   );
+}
+
+AboutScreen.propTypes = {
+  symbol: PropTypes.string,
+  description: PropTypes.string,
+}
+
+AboutScreen.defaultProps = {
+  symbol: '',
+  description: ''
 }
 
 const styles = StyleSheet.create({

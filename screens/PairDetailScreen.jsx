@@ -9,17 +9,17 @@ import {
   RefreshControl,
   FlatList } from 'react-native';
 import { useEffect, useMemo } from 'react';
-
+import PropTypes from 'prop-types';
 import useCurrencySymbol from '../hooks/useCurrencySymbol';
-
 import ScreenViewWrapper from '../components/ScreenViewWrapper';
 import FormatNumberText from '../components/FormatNumberText';
 import TrendLineChart from '../components/TrendLineChart';
 import ShareToTwitterButton from '../components/ShareToTwitterButton';
 import RightArrowIcon from '../assets/images/right-arrow.png';
 import ShareIcon from '../assets/images/share.png';
-
 import font from '../constants/styleFonts';
+
+const COINGECKO_URL = 'https://www.coingecko.com/en/coins/';
 
 const statsInfoItem = ({label, value}) => {
   return (
@@ -44,10 +44,17 @@ export default function PairDetailScreen({
   fetchCoinDetail, fetchCoinFinance, fetchCoinFinanceGraph,
   isDetailsFetching, isFinanceFetching, isFinanceGraphFetching
 }) {
-  useEffect(()=> {
-    fetchCoinDetail({ coin_id: id });
-    fetchCoinFinanceGraph({coin_id: id , vs_currency})
-  },[id]);
+  const pricePointData = useMemo(()=>
+    chartDataWithoutTimestamp(chartData), 
+    [chartData]);
+
+  const currencySymbol = useCurrencySymbol(vs_currency);
+  const pairName = `${symbol}/${vs_currency}`?.toUpperCase();
+  const uppercaseSymbol = symbol.toUpperCase();
+  const lastUpdated = last_updated.split('T')[0];
+  const isAllDataFetching = isFinanceFetching && isDetailsFetching && isFinanceGraphFetching;
+
+  const seeMoreButton = () => Linking.openURL(`${COINGECKO_URL}${id}`);
 
   const onRefresh = () => {
     fetchCoinDetail({ coin_id: id });
@@ -55,16 +62,11 @@ export default function PairDetailScreen({
     fetchCoinFinanceGraph({coin_id: id , vs_currency});
   }
 
-  const pricePointData = useMemo(()=>
-    chartDataWithoutTimestamp(chartData), 
-    [chartData]);
+  useEffect(()=> {
+    fetchCoinDetail({ coin_id: id });
+    fetchCoinFinanceGraph({coin_id: id , vs_currency})
+  },[id]);
 
-  const currencySymbol = useCurrencySymbol(vs_currency);
-
-  const pairName = `${symbol}/${vs_currency}`?.toUpperCase();
-  const uppercaseSymbol = symbol.toUpperCase();
-  const lastUpdated = last_updated.split('T')[0];
-  const isAllDataFetching = isFinanceFetching && isDetailsFetching && isFinanceGraphFetching;
   return (
     <ScreenViewWrapper>
       <View style={styles.header}>
@@ -120,7 +122,7 @@ export default function PairDetailScreen({
               <Text style={styles.sectionTitle}>Statistics</Text>
               <Pressable 
                 style={styles.seeMoreBtn}
-                onPress={()=>Linking.openURL(`https://www.coingecko.com/en/coins/${id}`)} 
+                onPress={seeMoreButton} 
               >
                 <Text style={styles.seeMoreBtnText}>See More</Text>
                 <Image style={styles.leftArrow} source={RightArrowIcon} />
@@ -201,6 +203,65 @@ export default function PairDetailScreen({
     </ScreenViewWrapper>
   )
 }
+
+PairDetailScreen.propTypes = {
+  dataKey: PropTypes.string.isRequired,
+  id: PropTypes.string,
+  symbol: PropTypes.string,
+  name: PropTypes.string, 
+  image: PropTypes.string, 
+  current_price: PropTypes.number,
+  market_cap: PropTypes.number,
+  market_cap_rank: PropTypes.number, 
+  price_change_percentage_24h: PropTypes.number,
+  high_24h: PropTypes.number,
+  low_24h: PropTypes.number,
+  all_time_high: PropTypes.number,
+  all_time_low: PropTypes.number,
+  total_supply: PropTypes.number, 
+  max_supply: PropTypes.number,
+  fully_diluted_valuation: PropTypes.number, 
+  circulating_supply: PropTypes.number, 
+  last_updated: PropTypes.string,
+  vs_currency: PropTypes.string, 
+  description: PropTypes.string, 
+  chartData: PropTypes.array, 
+  isDetailsFetching: PropTypes.bool,
+  isFinanceFetching: PropTypes.bool,
+  isFinanceGraphFetching: PropTypes.bool,
+  fetchCoinDetail: PropTypes.func,
+  fetchCoinFinance: PropTypes.func,
+  fetchCoinFinanceGraph: PropTypes.func,
+};
+
+PairDetailScreen.defaultProps = {
+  id: '',
+  symbol: '',
+  name: '',
+  image: '',
+  current_price: 0,
+  market_cap: 0,
+  market_cap_rank: 0,
+  price_change_percentage_24h: 0,
+  high_24h: 0,
+  low_24h: 0,
+  all_time_high: 0,
+  all_time_low: 0,
+  total_supply: 0,
+  max_supply: 0,
+  fully_diluted_valuation: 0,
+  circulating_supply: 0,
+  last_updated: '',
+  vs_currency: '',
+  description: '',
+  chartData: [],
+  isDetailsFetching: false,
+  isFinanceFetching: false,
+  isFinanceGraphFetching: false,
+  fetchCoinDetail: () => null,
+  fetchCoinFinance: () => null,
+  fetchCoinFinanceGraph: () => null,
+};
 
 const styles = StyleSheet.create({
   header: {

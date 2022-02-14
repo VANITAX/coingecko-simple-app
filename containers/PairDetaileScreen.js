@@ -1,9 +1,8 @@
 import { connect } from 'react-redux';
-import PairDetailScreen from '../screens/PairDetailScreen';
-
 import fetchCoinMarketFinanceGraph from '../actions/fetchCoinMarketFinanceGraph';
-import fetchCoinMarketDetail from '../actions/fetchCoinMarketDetail';
 import fetchCoinMarketFinance from '../actions/fetchCoinMarketFinance';
+import fetchCoinMarketDetail from '../actions/fetchCoinMarketDetail';
+import PairDetailScreen from '../screens/PairDetailScreen';
 
 const CHART_RANGE_DATA_HARDCODE = 'range:7:daily';
 

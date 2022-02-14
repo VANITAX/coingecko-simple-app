@@ -7,46 +7,42 @@ import {
   Image, 
   Linking,
   FlatList } from 'react-native';
-import { Link } from '@react-navigation/native';
 import { useEffect, useCallback, useMemo } from 'react';
-
-import usePrevious from '../hooks/usePrevious';
-
+import { Link } from '@react-navigation/native';
+import PropTypes from 'prop-types';
 import FiltersColumn from '../containers/FiltersColumn';
 import PairItem from '../containers/PairItem';
-
 import ScreenViewWrapper from '../components/ScreenViewWrapper';
 import ShareToTwitterButton from '../components/ShareToTwitterButton';
 import Spinner from '../components/Spinner';
-
 import font from '../constants/styleFonts';
-
 import ShareIcon from '../assets/images/share.png';
 import SearchIcon from '../assets/images/search.png';
+import usePrevious from '../hooks/usePrevious';
+
+const renderItem = ({ item: dataKey }) => (
+  <Link key={dataKey} to={{screen: 'PairDetail', params: { dataKey }}} >
+    <PairItem dataKey={dataKey}/>
+  </Link>
+);
+
+const renderLoading = () => (
+  <View style={styles.loading}>
+    <Spinner />
+  </View>
+);
 
 export default function PairsListScreen({ 
   navigation, 
   pairItemIds,
   nextPage,
-  lastPage,
   isFetching,
   fetchCoinFinanceList,
   clearPairsList,
   currency,
   sorting
 }) {
-
-  const renderItem = ({ item: dataKey }) => (
-    <Link key={dataKey} to={{screen: 'PairDetail', params: { dataKey }}} >
-      <PairItem dataKey={dataKey}/>
-    </Link>
-  );
-
-  const renderLoading = () => (
-    <View style={styles.loading}>
-      <Spinner />
-    </View>
-  );
+  const prevCurrency = usePrevious(currency);
 
   const renderPairItem = useMemo(()=>renderItem, []);
 
@@ -55,20 +51,14 @@ export default function PairsListScreen({
       vs_currency: currency,
       order: sorting,
       page: 1,
-    }),[currency, sorting])
+    }),[currency, sorting]);
 
   const fetchNext = useCallback(() => 
     fetchCoinFinanceList({
       vs_currency: currency,
       order: sorting,
       page: nextPage,
-    }),[currency, sorting, nextPage])
-
-  const prevCurrency = usePrevious(currency);
-
-  useEffect(() => {
-    if(prevCurrency !== currency) clearPairsList();
-  },[currency]);
+    }),[currency, sorting, nextPage]);
 
   useEffect(() => 
     fetchData(),
@@ -112,6 +102,24 @@ export default function PairsListScreen({
       />
     </ScreenViewWrapper>
   );
+}
+
+PairsListScreen.propTypes = {
+  pairItemIds: PropTypes.array, 
+  nextPage: PropTypes.number, 
+  sorting: PropTypes.string, 
+  currency: PropTypes.string, 
+  isFetching: PropTypes.bool,
+  fetchCoinFinanceList: PropTypes.func,
+}
+
+PairsListScreen.defaultProps = {
+  pairItemIds: [], 
+  nextPage: 1, 
+  sorting: '', 
+  currency: '', 
+  isFetching: false,
+  fetchCoinFinanceList: () => null,
 }
 
 const styles = StyleSheet.create({

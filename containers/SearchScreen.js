@@ -1,8 +1,7 @@
 import { connect } from 'react-redux';
-import SearchScreen from '../screens/SearchScreen';
-
-import fetchSearch from '../actions/fetchSearch';
 import clearPairsList from '../actions/clearPairsList';
+import fetchSearch from '../actions/fetchSearch';
+import SearchScreen from '../screens/SearchScreen';
 
 const NETWORK_KEY_PATH = ['list', 'search'];
 
@@ -21,7 +20,8 @@ const mapDispatchToProps = dispatch => ({
     vs_currency,
     networkKeyPath: NETWORK_KEY_PATH,
   })),
-  clearSearchResults: () => dispatch(clearPairsList({ screen: 'search' }))
+  clearSearchResults: () => 
+    dispatch(clearPairsList({ screen: 'search' }))
 })
 
 

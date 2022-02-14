@@ -13,18 +13,17 @@ const RANGES = [
   { divider: 1e3, suffix: 'K' },
 ];
 
-export const NumberWithMetric = (num, fixed) => {
+const NumberWithMetric = (num, fixed) => {
   for (let i = 0; i < RANGES.length; i++) {
     if (num >= RANGES[i].divider) {
       return (num / RANGES[i].divider).toFixed(fixed).toString() + RANGES[i].suffix;
     }
   }
-
   return num.toString();
 };
 
 // Ref. https://stackoverflow.com/a/2901298
-export const numberWithCommas = num => {
+const numberWithCommas = num => {
   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
 
@@ -49,7 +48,6 @@ export default function FormatNumberText ({
   style,
   ...props }){
 
-    // need to transform to Number first.
     if(typeof value !== "number") return null;
     let result = Math.abs(value);
     const ownStyle = [style];

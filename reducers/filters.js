@@ -1,9 +1,7 @@
 import { fromJS } from 'immutable';
-
 import {
   SET_FILTER_OPTION,
 } from '../constants/actionTypes';
-
 import { sortOptions,  currenciesOptions } from '../constants/filterOptions';
 
 
@@ -27,13 +25,12 @@ export default (state = defaultState, action) => {
 };
 
 /**
- * Add list items
+ * Set Filter Options
  * @kind reducer/actionType
  * @name SET_FILTER_OPTION
- * @param {string} {select} - list select 
- * @param {array} [{itemIds}=[]] - list item ids
- * @param {number} [{nextPage}] - list next page
- * @param {number} [{lastPage}] - list last page
+ * @param {string} {screen} - select screen
+ * @param {string} {filter} - select type
+ * @param {string} {value} - set value
  * @return {Immutable.Map} New state
  */
 const _SET_FILTER_OPTION = ({
