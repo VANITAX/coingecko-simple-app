@@ -14,7 +14,7 @@
 
 1. Clone repository `$ git clone git@github.com:VANITAX/coingecko-simple-app.git`
 
-2. Into project folder
+2. Into project folder `$ cd /$PATH/coingecko-simple-app`
 
 3. Run `$ cp config/default.config.json config/config.json`
 
