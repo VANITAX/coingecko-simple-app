@@ -8,8 +8,7 @@
 - `Xcode`
 - `Android Studio`
 
-## Getting Started
-
+## Development
 
 
 1. Clone repository `$ git clone git@github.com:VANITAX/coingecko-simple-app.git`
