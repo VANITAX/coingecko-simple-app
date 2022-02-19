@@ -12,15 +12,15 @@
 
 
 
-1. Clone repository `git clone git@github.com:VANITAX/coingecko-simple-app.git`
+1. Clone repository `$ git clone git@github.com:VANITAX/coingecko-simple-app.git`
 
 2. Into project folder
 
 3. Run `$ cp config/default.config.json config/config.json`
 
-4. Run `$ yarn install` or `yarn`
+4. Run `$ yarn install` or `$ yarn`
 
-5. When modules installed then run `yarn start`
+5. When modules installed then run `$ yarn start`
 
 6. Following terminal expo-cli develope steps 
 
