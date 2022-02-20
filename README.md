@@ -1,15 +1,14 @@
 # CoinGecko Simple React Native APP using Expo
 
-## Environment Required
+## Environment Requirement
 
 - `Expo-cli`
 - `node v14.15.0`
 - `yarn`
-- `Xcode`
-- `Android Studio`
+- `Xcode (Optional)`
+- `Android Studio (Optional)`
 
 ## Development
-
 
 1. Clone repository `$ git clone git@github.com:VANITAX/coingecko-simple-app.git`
 
