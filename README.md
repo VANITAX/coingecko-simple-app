@@ -1,4 +1,5 @@
 # CoinGecko Simple React Native APP using Expo
+![image (8)](https://github.com/VANITAX/homework-amis/assets/6407666/4166990b-4ff3-46b6-a251-96dc9a3e6bc6)
 
 ## Environment Requirement
 
